@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String           @id @default(uuid()) @db.Uuid
+  email           String           @unique
+  password_hash   String?
+  full_name       String
+  avatar_url      String?
+  timezone        String           @default("UTC")
+  currency        String           @default("USD")
+  is_verified     Boolean          @default(false)
+  strategies      Strategy[]
+  backtestresults BacktestResult[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model Strategy {
+  id              String           @id @default(uuid()) @db.Uuid
+  name            String
+  description     String?
+  code            String
+  asset_symbol    String
+  timeframe       String
+  is_public       Boolean          @default(false)
+  status          Status           @default(active)
+  version         Int              @default(1)
+  backtestresults BacktestResult[]
+  user_id         String           @db.Uuid
+  user            User             @relation(fields: [user_id], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model BacktestResult {
+  id               String               @id @default(uuid()) @db.Uuid
+  job_id           String
+  strategy_id      String               @db.Uuid
+  user_id          String               @db.Uuid
+  status           BacktestResultStatus @default(pending)
+  start_date       DateTime
+  end_date         DateTime
+  initial_capital  Decimal              @db.Decimal(15, 2)
+  final_capital    Decimal?             @db.Decimal(15, 2)
+  total_return_pct Decimal?             @db.Decimal(10, 4)
+  max_drawdown_pct Decimal?             @db.Decimal(10, 4)
+  win_rate         Decimal?             @db.Decimal(5, 2)
+  sharpe_ratio     Decimal?             @db.Decimal(8, 4)
+  total_trades     Int?
+  ai_analysis      String?
+  created_at       DateTime             @default(now())
+  strategy         Strategy             @relation(fields: [strategy_id], references: [id])
+  user             User                 @relation(fields: [user_id], references: [id])
+}
+
+enum Status {
+  active
+  paused
+  archived
+}
+
+enum BacktestResultStatus {
+  pending
+  running
+  completed
+  failed
+}
