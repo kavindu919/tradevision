@@ -8,18 +8,21 @@ datasource db {
 }
 
 model User {
-  id              String           @id @default(uuid()) @db.Uuid
-  email           String           @unique
-  password_hash   String?
-  full_name       String
-  avatar_url      String?
-  timezone        String           @default("UTC")
-  currency        String           @default("USD")
-  is_verified     Boolean          @default(false)
-  strategies      Strategy[]
-  backtestresults BacktestResult[]
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  id                 String             @id @default(uuid()) @db.Uuid
+  email              String             @unique
+  password_hash      String?
+  full_name          String
+  avatar_url         String?
+  timezone           String             @default("UTC")
+  currency           String             @default("USD")
+  is_verified        Boolean            @default(false)
+  strategies         Strategy[]
+  backtestresults    BacktestResult[]
+  refresh_tokens     RefreshToken[]
+  auth_accounts      AuthAccount[]
+  email_verification EmailVerification?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
 }
 
 model Strategy {
@@ -34,7 +37,7 @@ model Strategy {
   version         Int              @default(1)
   backtestresults BacktestResult[]
   user_id         String           @db.Uuid
-  user            User             @relation(fields: [user_id], references: [id])
+  user            User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 }
@@ -56,8 +59,37 @@ model BacktestResult {
   total_trades     Int?
   ai_analysis      String?
   created_at       DateTime             @default(now())
-  strategy         Strategy             @relation(fields: [strategy_id], references: [id])
-  user             User                 @relation(fields: [user_id], references: [id])
+  strategy         Strategy             @relation(fields: [strategy_id], references: [id], onDelete: Cascade)
+  user             User                 @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid()) @db.Uuid
+  token_hash String   @unique
+  user_id    String   @db.Uuid
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  expires_at DateTime
+  created_at DateTime @default(now())
+}
+
+model AuthAccount {
+  id          String   @id @default(uuid()) @db.Uuid
+  provider    String
+  provider_id String
+  user_id     String   @db.Uuid
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  created_at  DateTime @default(now())
+
+  @@unique([provider, provider_id])
+}
+
+model EmailVerification {
+  id         String   @id @default(uuid()) @db.Uuid
+  token      String   @unique
+  user_id    String   @unique @db.Uuid
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  created_at DateTime @default(now())
+  expires_at DateTime
 }
 
 enum Status {
