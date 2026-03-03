@@ -5,7 +5,7 @@ export async function hashPassword(plain: string) {
   return hashedValue;
 }
 
-export async function name(plain: string, hash: string) {
+export async function comparePassword(plain: string, hash: string) {
   const isVerified = await bcrypt.compare(plain, hash);
   return isVerified;
 }
