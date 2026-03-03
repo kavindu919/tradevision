@@ -10,14 +10,21 @@ import {
   register,
   verifyEmail,
 } from "../controllers/auth.controller";
+import { validate } from "../middleware/validate.middleware";
+import {
+  loginSchema,
+  refreshSchema,
+  registerSchema,
+  verifyEmailSchema,
+} from "../schemas/auth.schema";
 
 const router = Router();
 
-router.post("/register", register);
-router.post("/login", login);
-router.post("/refresh", refreshTokens);
+router.post("/register", validate(registerSchema), register);
+router.post("/login", validate(loginSchema), login);
+router.post("/refresh", validate(refreshSchema), refreshTokens);
 router.post("/logout", logout);
-router.post("/verify-email", verifyEmail);
+router.post("/verify-email", validate(verifyEmailSchema), verifyEmail);
 router.get("/me", getMe);
 
 router.get(
