@@ -475,3 +475,41 @@ export const googleCallbackController = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getMe = async (req: Request, res: Response) => {
+  try {
+    const userId = req.headers["x-user-id"] as string;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      data: {
+        fullname: user.full_name,
+        email: user.email,
+        avatar_url: user.avatar_url,
+        timezone: user.timezone,
+        currency: user.currency,
+        is_verified: user.is_verified,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong please try again",
+    });
+  }
+};
