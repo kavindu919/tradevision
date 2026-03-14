@@ -4,6 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
 import { randomUUID } from "crypto";
+import cookieParser from "cookie-parser";
 import router from "./routes/proxy.routes";
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+app.use(cookieParser());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use((req, _res, next) => {
   if (!req.headers["x-request-id"]) {
