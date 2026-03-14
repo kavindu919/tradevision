@@ -42,10 +42,10 @@ export function verifyAccessToken(token: string) {
   return jwt.verify(token, ACCESS_SECRET);
 }
 export function verifyRefreshToken(token: string) {
-  if (!ACCESS_SECRET) {
-    throw new Error("ACCESS_SECRET not defined");
+  if (!REFRESH_SECRET) {
+    throw new Error("REFRESH_SECRET not defined");
   }
-  return jwt.verify(token, ACCESS_SECRET);
+  return jwt.verify(token, REFRESH_SECRET);
 }
 export function hashToken(rawToken: string): string {
   return crypto.createHash("sha256").update(rawToken).digest("hex");
