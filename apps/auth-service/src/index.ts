@@ -38,7 +38,7 @@ app.get("/health", (_req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
-app.use("/auth", authRoutes);
+app.use(authRoutes);
 app.use((_req, res) => {
   res.status(404).json({
     success: false,
