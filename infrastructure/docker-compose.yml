@@ -11,6 +11,12 @@ services:
       - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   timescaledb:
     image: timescale/timescaledb-ha:pg15-latest
@@ -47,6 +53,66 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+
+  auth-service:
+    build:
+      context: ..
+      dockerfile: apps/auth-service/Dockerfile
+    container_name: tv_auth_service
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      NODE_ENV: development
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:3001/health || exit 1",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ..
+      dockerfile: apps/api-gateway/Dockerfile
+    container_name: tv_api_gateway
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL}
+      AUTH_SERVICE_URL: http://auth-service:3001
+      MARKET_SERVICE_URL: http://market-data-service:3002
+      BACKTEST_SERVICE_URL: http://backtest-service:3003
+      PAPER_TRADING_SERVICE_URL: http://paper-trading-service:3004
+      AI_SERVICE_URL: http://ai-analysis-service:3005
+      NOTIFICATION_SERVICE_URL: http://notification-service:3006
+    depends_on:
+      auth-service:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   postgres_data:

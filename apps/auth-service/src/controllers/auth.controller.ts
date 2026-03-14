@@ -12,21 +12,21 @@ import {
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { fullname, email, password } = req.body;
+    const { fullName, email, password } = req.body;
     const isUser = await prisma.user.findUnique({
       where: { email: email },
     });
     if (isUser) {
       return res.status(409).json({
         success: false,
-        message: "User already exsist",
+        message: "User already exists",
       });
     }
     const hashedPassword = await hashPassword(password);
 
     const user = await prisma.user.create({
       data: {
-        full_name: fullname,
+        full_name: fullName,
         email: email,
         password_hash: hashedPassword,
       },
@@ -57,23 +57,34 @@ export const register = async (req: Request, res: Response) => {
       },
     });
     const userData = {
-      fullname: user.full_name,
+      fullName: user.full_name,
       email: user.email,
       is_verified: user.is_verified,
     };
+
+    res.cookie("accessToken", access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie("refreshToken", refresh_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.status(201).json({
       success: true,
       data: userData,
-      tokens: {
-        access_token: access_token,
-        refresh_token: refresh_token,
-      },
-      message: "Registration complte",
+      message: "Registration complete",
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Something went wong please try again",
+      message: "Something went wrong, please try again",
     });
   }
 };
@@ -117,17 +128,26 @@ export const login = async (req: Request, res: Response) => {
     });
 
     const userData = {
-      fullname: isUser.full_name,
+      fullName: isUser.full_name,
       email: isUser.email,
       is_verified: isUser.is_verified,
     };
-    return res.status(201).json({
+    res.cookie("accessToken", access_token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 15 * 60 * 1000,
+    });
+    res.cookie("refreshToken", refresh_token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    return res.status(200).json({
       success: true,
       data: userData,
-      tokens: {
-        access_token: access_token,
-        refresh_token: refresh_token,
-      },
+
       message: "Login successful",
     });
   } catch (error) {
@@ -140,7 +160,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const refreshTokens = async (req: Request, res: Response) => {
   try {
-    const { token } = req.body;
+    const token = req.cookies.refreshToken;
 
     if (!token) {
       return res.status(401).json({
@@ -203,16 +223,24 @@ export const refreshTokens = async (req: Request, res: Response) => {
       where: { id: storedToken.user_id },
     });
 
+    res.cookie("accessToken", access_token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 15 * 60 * 1000,
+    });
+    res.cookie("refreshToken", refresh_token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     return res.status(200).json({
       success: true,
       data: {
-        fullname: user!.full_name,
+        fullName: user!.full_name,
         email: user!.email,
         is_verified: user!.is_verified,
-      },
-      tokens: {
-        access_token,
-        refresh_token,
       },
       message: "Tokens refreshed successfully",
     });
@@ -226,7 +254,7 @@ export const refreshTokens = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    const { token } = req.body;
+    const token = req.cookies.refreshToken;
     if (!token) {
       return res.status(200).json({
         success: true,
@@ -237,6 +265,8 @@ export const logout = async (req: Request, res: Response) => {
     await prisma.refreshToken.deleteMany({
       where: { token_hash: hashedToken },
     });
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
     return res.status(200).json({
       success: true,
       message: "Logged out successfully",
@@ -251,7 +281,7 @@ export const logout = async (req: Request, res: Response) => {
 
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
-    const { token } = req.body;
+    const { token } = req.cookies.refreshToken;
     if (!token) {
       return res.status(400).json({
         success: false,
@@ -340,7 +370,7 @@ export const upsertOAuthUser = async (req: Request, res: Response) => {
       return res.status(200).json({
         success: true,
         data: {
-          fullname: user.full_name,
+          fullName: user.full_name,
           email: user.email,
           is_verified: user.is_verified,
         },
@@ -387,7 +417,7 @@ export const upsertOAuthUser = async (req: Request, res: Response) => {
       return res.status(200).json({
         success: true,
         data: {
-          fullname: existingUser.full_name,
+          fullName: existingUser.full_name,
           email: existingUser.email,
           is_verified: true,
         },
@@ -431,7 +461,7 @@ export const upsertOAuthUser = async (req: Request, res: Response) => {
     return res.status(201).json({
       success: true,
       data: {
-        fullname: newUser.full_name,
+        fullName: newUser.full_name,
         email: newUser.email,
         is_verified: newUser.is_verified,
       },
@@ -497,13 +527,11 @@ export const getMe = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       data: {
-        fullname: user.full_name,
+        fullName: user.full_name,
         email: user.email,
         avatar_url: user.avatar_url,
         timezone: user.timezone,
         currency: user.currency,
-        is_verified: user.is_verified,
-        createdAt: user.createdAt,
       },
     });
   } catch (error) {

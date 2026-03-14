@@ -4,11 +4,16 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:auth": "pnpm --filter auth-service dev",
+    "dev:gateway": "pnpm --filter api-gateway dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@prisma/client": "^7.4.2",
+    "prisma": "^7.4.2",
+    "tsx": "^4.19.2",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.1",
     "prettier": "^3.7.4",

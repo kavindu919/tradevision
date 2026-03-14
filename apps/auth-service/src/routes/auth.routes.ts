@@ -1,6 +1,5 @@
 import { Router } from "express";
 import passport from "../middleware/passport.middleware";
-
 import {
   getMe,
   googleCallbackController,
@@ -13,7 +12,6 @@ import {
 import { validate } from "../middleware/validate.middleware";
 import {
   loginSchema,
-  refreshSchema,
   registerSchema,
   verifyEmailSchema,
 } from "../schemas/auth.schema";
@@ -22,7 +20,7 @@ const router = Router();
 
 router.post("/register", validate(registerSchema), register);
 router.post("/login", validate(loginSchema), login);
-router.post("/refresh", validate(refreshSchema), refreshTokens);
+router.post("/refresh", refreshTokens);
 router.post("/logout", logout);
 router.post("/verify-email", validate(verifyEmailSchema), verifyEmail);
 router.get("/me", getMe);

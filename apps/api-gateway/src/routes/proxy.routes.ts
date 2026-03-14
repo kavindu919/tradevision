@@ -14,13 +14,15 @@ const SERVICES = {
   notification: process.env.NOTIFICATION_SERVICE_URL ?? "http://localhost:3006",
 };
 
-function proxy(target: string) {
+function proxy(target: string, pathPrefix: string) {
   return createProxyMiddleware({
     target,
     changeOrigin: true,
+    pathRewrite: { [`^${pathPrefix}`]: "" },
+    proxyTimeout: 10000,
     on: {
       error: (_err, _req, res) => {
-        (res as Response).status(501).json({
+        (res as Response).status(502).json({
           success: false,
           error: {
             code: "SERVICE_UNAVAILABLE",
@@ -32,12 +34,57 @@ function proxy(target: string) {
   });
 }
 
-router.use("api/auth", proxy(SERVICES.auth));
-router.use("/api/market", optionalAuth, proxy(SERVICES.market));
-router.use("/api/strategies", requireAuth, proxy(SERVICES.backtest));
-router.use("/api/backtest", requireAuth, proxy(SERVICES.backtest));
-router.use("/api/paper-trading", requireAuth, proxy(SERVICES.paperTrading));
-router.use("api/ai", requireAuth, proxy(SERVICES.ai));
-router.use("api/notifications", requireAuth, proxy(SERVICES.notification));
+router.get("/api/auth/me", requireAuth, proxy(SERVICES.auth, "/api/auth"));
+router.post("/api/auth/logout", requireAuth, proxy(SERVICES.auth, "/api/auth"));
+
+router.use("/api/auth", proxy(SERVICES.auth, "/api/auth"));
+router.use("/api/market", optionalAuth, proxy(SERVICES.market, "/api/market"));
+router.use(
+  "/api/strategies",
+  requireAuth,
+  proxy(SERVICES.backtest, "/api/strategies"),
+);
+router.use(
+  "/api/backtest",
+  requireAuth,
+  proxy(SERVICES.backtest, "/api/backtest"),
+);
+router.use(
+  "/api/paper-trading",
+  requireAuth,
+  proxy(SERVICES.paperTrading, "/api/paper-trading"),
+);
+router.use("/api/ai", requireAuth, proxy(SERVICES.ai, "/api/ai"));
+router.use(
+  "/api/notifications",
+  requireAuth,
+  proxy(SERVICES.notification, "/api/notifications"),
+);
+
+router.get("/api/auth/me", requireAuth, proxy(SERVICES.auth, "/api/auth"));
+router.post("/api/auth/logout", requireAuth, proxy(SERVICES.auth, "/api/auth"));
+router.use("/api/auth", proxy(SERVICES.auth, "/api/auth"));
+router.use("/api/market", optionalAuth, proxy(SERVICES.market, "/api/market"));
+router.use(
+  "/api/strategies",
+  requireAuth,
+  proxy(SERVICES.backtest, "/api/strategies"),
+);
+router.use(
+  "/api/backtest",
+  requireAuth,
+  proxy(SERVICES.backtest, "/api/backtest"),
+);
+router.use(
+  "/api/paper-trading",
+  requireAuth,
+  proxy(SERVICES.paperTrading, "/api/paper-trading"),
+);
+router.use("/api/ai", requireAuth, proxy(SERVICES.ai, "/api/ai"));
+router.use(
+  "/api/notifications",
+  requireAuth,
+  proxy(SERVICES.notification, "/api/notifications"),
+);
 
 export default router;
