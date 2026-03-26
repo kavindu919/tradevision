@@ -24,7 +24,6 @@ export const requireAuth = async (
     req.headers["x-user-email"] = decode.email;
     next();
   } catch (error) {
-    console.log(error);
     return res.status(401).json({
       success: false,
       message: "Invalid or expired token",

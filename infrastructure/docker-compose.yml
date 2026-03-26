@@ -114,6 +114,36 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  market-data-service:
+    build:
+      context: ..
+      dockerfile: apps/market-data-service/Dockerfile
+    container_name: tv_market_data_service
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      NODE_ENV: development
+      TIMESCALE_URL: ${TIMESCALE_URL}
+      TD_API_KEY: ${TD_API_KEY}
+      TD_BASE_URL: ${TD_BASE_URL}
+    depends_on:
+      - timescaledb
+      - redis
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:3002/health || exit 1",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   timescale_data:

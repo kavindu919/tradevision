@@ -9,6 +9,7 @@ import {
   signRefreshToken,
   verifyRefreshToken,
 } from "../utils/jwt.util";
+import { sendVerificationEmail } from "../../utils/email.util";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -43,6 +44,7 @@ export const register = async (req: Request, res: Response) => {
         expires_at: verificationTokenforEmailExpire,
       },
     });
+    await sendVerificationEmail(user.email, verificationTokenforEmail);
 
     const access_token = signAccessToken(user.id, user.email);
     const refresh_token = signRefreshToken(user.id, user.email);
@@ -281,11 +283,11 @@ export const logout = async (req: Request, res: Response) => {
 
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
-    const { token } = req.cookies.refreshToken;
+    const { token } = req.body;
     if (!token) {
       return res.status(400).json({
         success: false,
-        message: "Missing required feild",
+        message: "Missing required field",
       });
     }
     const verifyToken = await prisma.emailVerification.findUnique({
@@ -314,7 +316,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      message: "Email verication successfull",
+      message: "Email verication successful",
     });
   } catch (error) {
     return res.status(500).json({
@@ -367,16 +369,25 @@ export const upsertOAuthUser = async (req: Request, res: Response) => {
         },
       });
 
+      res.cookie("accessToken", access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 15 * 60 * 1000,
+      });
+      res.cookie("refreshToken", refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
       return res.status(200).json({
         success: true,
         data: {
           fullName: user.full_name,
           email: user.email,
           is_verified: user.is_verified,
-        },
-        tokens: {
-          access_token: access_token,
-          refresh_token: refresh_token,
         },
         message: "Login successful",
       });
@@ -414,16 +425,25 @@ export const upsertOAuthUser = async (req: Request, res: Response) => {
         }),
       ]);
 
+      res.cookie("accessToken", access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 15 * 60 * 1000,
+      });
+      res.cookie("refreshToken", refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
       return res.status(200).json({
         success: true,
         data: {
           fullName: existingUser.full_name,
           email: existingUser.email,
           is_verified: true,
-        },
-        tokens: {
-          access_token: access_token,
-          refresh_token: refresh_token,
         },
         message: "Login successful",
       });
@@ -458,16 +478,25 @@ export const upsertOAuthUser = async (req: Request, res: Response) => {
       }),
     ]);
 
+    res.cookie("accessToken", access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
+    res.cookie("refreshToken", refresh_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.status(201).json({
       success: true,
       data: {
         fullName: newUser.full_name,
         email: newUser.email,
         is_verified: newUser.is_verified,
-      },
-      tokens: {
-        access_token: access_token,
-        refresh_token: refresh_token,
       },
       message: "Account created successfully",
     });
