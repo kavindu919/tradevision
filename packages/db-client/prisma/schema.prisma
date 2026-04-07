@@ -91,6 +91,20 @@ model EmailVerification {
   expires_at DateTime
 }
 
+model Ohlcv {
+  id        String   @id @default(cuid())
+  time      DateTime @db.Timestamptz(3)
+  symbol    String
+  timeframe String
+  open      Float
+  high      Float
+  low       Float
+  close     Float
+  volume    Float?
+
+  @@index([symbol, timeframe, time])
+}
+
 enum Status {
   active
   paused
