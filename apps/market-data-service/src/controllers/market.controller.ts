@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { twelveDataClient } from "../config/twelvedata.js";
 import { redisClient } from "../config/redis.js";
-import prisma from "../../../../packages/db-client/src/index.js";
+import { insertOHLCVData } from "../services/timescaledb.service.js";
 
 export const getHistory = async (req: Request, res: Response) => {
   try {
@@ -42,7 +42,7 @@ export const getHistory = async (req: Request, res: Response) => {
         volume: c.volume ? parseFloat(c.volume) : null,
       }));
 
-      await prisma.ohlcv.createMany({ data: candles, skipDuplicates: true });
+      await insertOHLCVData(candles);
     }
 
     await redisClient.set(cacheKey, JSON.stringify(response.data), {

@@ -6,5 +6,9 @@ import { twelvedataSchema } from "../schemas/twelveData.schema.js";
 const router = Router();
 
 router.get("/history", validate(twelvedataSchema), getHistory);
+// router.get("/quote", getQuote);
+// router.post("/quotes", getMultipleQuotes);
+// router.get("/intraday", getIntraday);
+// router.get("/status", getMarketStatus);
 
 export default router;

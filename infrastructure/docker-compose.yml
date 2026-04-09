@@ -73,7 +73,8 @@ services:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL}
-      FRONTEND_URL: ${FRONTEND_URL}
+      CLIENT_URL: ${CLIENT_URL}
+      RESEND_API_KEY: ${RESEND_API_KEY}
     depends_on:
       postgres:
         condition: service_healthy

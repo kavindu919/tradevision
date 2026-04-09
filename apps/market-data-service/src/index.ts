@@ -2,10 +2,16 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import { createServer } from "http";
 import marketRoutes from "./routes/market.routes.js";
+import WebSocketService from "./services/websocket.service.js";
+import { initializeOHLCVTable } from "./services/timescaledb.service.js";
 
 const app = express();
+const httpServer = createServer(app);
 const PORT = process.env.PORT ?? 3002;
+
+const wsService = new WebSocketService(httpServer);
 
 app.use(
   helmet({
@@ -32,6 +38,12 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/market", marketRoutes);
 
-app.listen(PORT, () => {
-  console.log(`server runing on port ${PORT}`);
-});
+(async () => {
+  await initializeOHLCVTable();
+
+  httpServer.listen(PORT, () => {
+    console.log(`server runing on port ${PORT}`);
+    console.log(`WebSocket enabled for real-time prices`);
+    console.log(`TimescaleDB initialized`);
+  });
+})();
