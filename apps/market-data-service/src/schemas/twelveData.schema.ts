@@ -25,3 +25,43 @@ export const twelvedataSchema = z.object({
   body: z.object({}).optional(),
   params: z.object({}).optional(),
 });
+
+export const getQuoteSchema = z.object({
+  query: z.object({
+    symbol: z
+      .string({ message: "Symbol is required" })
+      .min(1, "Symbol cannot be empty")
+      .transform((val) => val.toUpperCase()),
+  }),
+  body: z.object({}).optional(),
+  params: z.object({}).optional(),
+});
+
+export const getMultipleQuotesSchema = z.object({
+  body: z.object({
+    symbols: z
+      .array(
+        z
+          .string({ message: "Symbol is required" })
+          .min(1, "Symbol cannot be empty")
+          .transform((val) => val.toUpperCase()),
+      )
+      .min(1, "At least one symbol is required"),
+  }),
+  query: z.object({}).optional(),
+  params: z.object({}).optional(),
+});
+
+export const getIntradaySchema = z.object({
+  query: z.object({
+    symbol: z
+      .string({ message: "Symbol is required" })
+      .min(1, "Symbol cannot be empty")
+      .transform((val) => val.toUpperCase()),
+    interval: z
+      .string({ message: "Interval is required" })
+      .min(1, "Interval cannot be empty"),
+  }),
+  body: z.object({}).optional(),
+  params: z.object({}).optional(),
+});
