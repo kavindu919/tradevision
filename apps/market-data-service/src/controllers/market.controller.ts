@@ -30,10 +30,10 @@ export const getHistory = async (req: Request, res: Response) => {
     });
 
     if (response.data.values?.length > 0) {
-      const symbol = req.query.symbol as string;
+      const symbolStr = symbol as string;
       const candles = response.data.values.map((c: any) => ({
         time: new Date(c.datetime),
-        symbol: symbol.toUpperCase(),
+        symbol: symbolStr.toUpperCase(),
         timeframe: interval,
         open: parseFloat(c.open),
         high: parseFloat(c.high),
