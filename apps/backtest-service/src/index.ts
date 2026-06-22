@@ -5,6 +5,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { randomUUID } from "crypto";
 import strategyRoutes from "./routes/strategies.route";
+import { extractUserFromHeaders } from "./middleware/user.middleware";
 
 const app = express();
 const PORT = process.env.PORT ?? 3003;
@@ -35,7 +36,8 @@ app.get("/health", (_req, res) => {
   });
 });
 
-app.use("/api/strategies", strategyRoutes);
+app.use(extractUserFromHeaders);
+app.use(strategyRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({
