@@ -16,6 +16,17 @@ export const listStrategies = async (req: Request, res: Response) => {
     const [strategies, total] = await Promise.all([
       prisma.strategy.findMany({
         where: { user_id: userId, status: { not: "archived" } },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          code: true,
+          asset_symbol: true,
+          timeframe: true,
+          is_public: true,
+          status: true,
+          version: true,
+        },
         orderBy: { createdAt: "desc" },
         skip: (page - 1) * limit,
         take: limit,
@@ -88,6 +99,7 @@ export const getStrategy = async (req: Request, res: Response) => {
         id: req.params.id,
       },
       select: {
+        id: true,
         name: true,
         description: true,
         code: true,
@@ -239,7 +251,7 @@ export const cloneStrategy = async (req: Request, res: Response) => {
         asset_symbol: strategy.asset_symbol,
         timeframe: strategy.timeframe,
         user_id: userId,
-        isPublic: false,
+        is_public: false,
       },
     });
     return res.status(201).json({
@@ -247,6 +259,7 @@ export const cloneStrategy = async (req: Request, res: Response) => {
       message: "Strategy cloned successfully",
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Something went wrong, please try again",
