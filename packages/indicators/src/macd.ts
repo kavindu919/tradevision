@@ -26,12 +26,15 @@ export const macd = (
   const macdLine = fastEma.map((f, i) =>
     isNaN(f) || isNaN(slowEma[i]) ? NaN : f - slowEma[i],
   );
-  const validMacd = macdLine.map((v) => (isNaN(v) ? 0 : v));
-  const signalRaw = ema(validMacd, signalPeriod);
 
-  const signal = signalRaw.map((s, i) => (isNaN(macdLine[i]) ? NaN : s));
+  const firstValidIdx = macdLine.findIndex((v) => !isNaN(v));
+  const validSlice = macdLine.slice(firstValidIdx) as number[];
+  const signalRaw = ema(validSlice, signalPeriod);
+  const signal = new Array(firstValidIdx).fill(NaN).concat(signalRaw);
+
   const histogram = macdLine.map((m, i) =>
     isNaN(m) || isNaN(signal[i]) ? NaN : m - signal[i],
   );
+
   return { macd: macdLine, signal, histogram };
 };

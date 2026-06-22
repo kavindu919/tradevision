@@ -61,30 +61,4 @@ router.use(
   proxy(SERVICES.notification, "/api/notifications"),
 );
 
-router.get("/api/auth/me", requireAuth, proxy(SERVICES.auth, "/api/auth"));
-router.post("/api/auth/logout", requireAuth, proxy(SERVICES.auth, "/api/auth"));
-router.use("/api/auth", proxy(SERVICES.auth, "/api/auth"));
-router.use("/api/market", optionalAuth, proxy(SERVICES.market, "/api/market"));
-router.use(
-  "/api/strategies",
-  requireAuth,
-  proxy(SERVICES.backtest, "/api/strategies"),
-);
-router.use(
-  "/api/backtest",
-  requireAuth,
-  proxy(SERVICES.backtest, "/api/backtest"),
-);
-router.use(
-  "/api/paper-trading",
-  requireAuth,
-  proxy(SERVICES.paperTrading, "/api/paper-trading"),
-);
-router.use("/api/ai", requireAuth, proxy(SERVICES.ai, "/api/ai"));
-router.use(
-  "/api/notifications",
-  requireAuth,
-  proxy(SERVICES.notification, "/api/notifications"),
-);
-
 export default router;

@@ -5,3 +5,4 @@ export { macd } from "./macd";
 export type { MACDResult } from "./macd";
 export { bollingerBands } from "./bollinger";
 export type { BollingerBandsResult } from "./bollinger";
+export { atr } from "./atr";
