@@ -6,9 +6,13 @@ import StrategyFilter from "@/components/strategy/StrategyFilter";
 import { Badge } from "@/components/ui/badge";
 import { ArchiveRestore, Copy, Pen, RotateCcw } from "lucide-react";
 import { useState } from "react";
-import { StrategyForm, type StrategyInput } from "@/components/strategy/StrategyForm";
+import {
+  StrategyForm,
+  type StrategyInput,
+} from "@/components/strategy/StrategyForm";
 import { createStrategy } from "@/services/strategy.service";
 import { ThemeToggle } from "@/components/theme-toggle";
+import Link from "next/link";
 
 const MOCK_STRATEGIES = [
   {
@@ -78,9 +82,6 @@ const MOCK_STRATEGIES = [
 ];
 
 const Strategy = () => {
-  const [displayAddNewstrategy, setDisplayAddNewstrategy] =
-    useState<boolean>(false);
-
   const handleCreateStrategy = async () => {
     try {
       const a: number = 10;
@@ -101,39 +102,44 @@ const Strategy = () => {
           >
             preview: empty state
           </Button>
-          <Button
-            variant="default"
-            size="lg"
-            className="cursor-pointer"
-            onClick={() => setDisplayAddNewstrategy((prev) => !prev)}
-          >
-            + New strategy
-          </Button>
+          <Link href="/">
+            <Button variant="default" size="lg" className="cursor-pointer">
+              + New strategy
+            </Button>
+          </Link>
           <ThemeToggle />
         </div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         <Card className="cursor-pointer transition-all border bg-card border-border">
           <CardContent>
-            <p className="text-xs font-medium mb-1 text-muted-foreground">Total</p>
+            <p className="text-xs font-medium mb-1 text-muted-foreground">
+              Total
+            </p>
             <p className="text-xl font-semibold text-foreground">6</p>
           </CardContent>
         </Card>
         <Card className="cursor-pointer transition-all border bg-card border-border">
           <CardContent>
-            <p className="text-xs font-medium mb-1 text-muted-foreground">Active</p>
+            <p className="text-xs font-medium mb-1 text-muted-foreground">
+              Active
+            </p>
             <p className="text-xl font-semibold text-success">3</p>
           </CardContent>
         </Card>
         <Card className="cursor-pointer transition-all border bg-card border-border">
           <CardContent>
-            <p className="text-xs font-medium mb-1 text-muted-foreground">Paused</p>
+            <p className="text-xs font-medium mb-1 text-muted-foreground">
+              Paused
+            </p>
             <p className="text-xl font-semibold text-warning">2</p>
           </CardContent>
         </Card>
         <Card className="cursor-pointer transition-all border bg-card border-border">
           <CardContent>
-            <p className="text-xs font-medium mb-1 text-muted-foreground">Archived</p>
+            <p className="text-xs font-medium mb-1 text-muted-foreground">
+              Archived
+            </p>
             <p className="text-xl font-semibold text-muted-foreground">1</p>
           </CardContent>
         </Card>
@@ -203,12 +209,6 @@ const Strategy = () => {
           </Card>
         ))}
       </div>
-      {displayAddNewstrategy && (
-        <StrategyForm
-          onSubmit={handleCreateStrategy}
-          submitLabel="Create Strategy"
-        />
-      )}
     </div>
   );
 };

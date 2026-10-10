@@ -58,26 +58,14 @@ const StrategyFilter = () => {
         Archived
       </Button>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button className="cursor-pointer border bg-card text-foreground border-border hover:bg-muted">
-            Filter
-            <ChevronDown className="ml-2 h-4 w-4" />
-          </Button>
+        <DropdownMenuTrigger variant="outline" size="lg">
+          Filter
+          <ChevronDown />
         </DropdownMenuTrigger>
-
-        <DropdownMenuContent
-          align="end"
-          className="bg-card border-border text-foreground"
-        >
-          <DropdownMenuItem className="hover:bg-transparent focus:bg-transparent focus:text-foreground">
-            All
-          </DropdownMenuItem>
-          <DropdownMenuItem className="hover:bg-transparent focus:bg-transparent focus:text-foreground">
-            Active
-          </DropdownMenuItem>
-          <DropdownMenuItem className="hover:bg-transparent focus:bg-transparent focus:text-foreground">
-            Archived
-          </DropdownMenuItem>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onSelect={() => setSelect("all")}>All</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setSelect("active")}>Active</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setSelect("archived")}>Archived</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
