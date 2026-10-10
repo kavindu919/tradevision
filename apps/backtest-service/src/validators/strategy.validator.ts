@@ -24,8 +24,4 @@ export const createStrategySchema = z.object({
   isPublic: z.boolean().default(false),
 });
 
-export const updateStrategySchema = createStrategySchema.partial().extend({
-  id: z
-    .string({ message: "Id is required. Please enter id" })
-    .uuid({ message: "Invalid id format" }),
-});
+export const updateStrategySchema = createStrategySchema.partial();

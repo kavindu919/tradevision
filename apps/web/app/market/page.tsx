@@ -6,12 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CandlestickData, Time } from "lightweight-charts";
-import { useMarketPrice } from "../hooks/useMarketPrice";
-import { useSocket } from "../hooks/useSocket";
+import { useMarketPrice } from "@/hooks/useMarketPrice";
+import { useSocket } from "@/hooks/useSocket";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const CandlestickChart = dynamic(
   () =>
-    import("../components/CandlestickChart").then(
+    import("@/components/CandlestickChart").then(
       (mod) => mod.CandlestickChart,
     ),
   { ssr: false },
@@ -57,18 +58,21 @@ export default function MarketPage() {
   }, [selectedSymbol]);
 
   return (
-    <main className="min-h-screen p-6 bg-[#0D1117]">
+    <main className="min-h-screen p-6 bg-background">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-[#E6EDF3]">TradeVision</h1>
-        <Badge
-          className={`border ${
-            isConnected
-              ? "bg-[#0D2818] text-[#10B981] border-[#10B981]"
-              : "bg-[#2D0A0A] text-[#EF4444] border-[#EF4444]"
-          }`}
-        >
-          {isConnected ? "● Live" : "● Disconnected"}
-        </Badge>
+        <h1 className="text-2xl font-semibold text-foreground">TradeVision</h1>
+        <div className="flex items-center gap-3">
+          <Badge
+            className={`border ${
+              isConnected
+                ? "bg-success-soft text-success border-success"
+                : "bg-danger-soft text-danger border-danger"
+            }`}
+          >
+            {isConnected ? "● Live" : "● Disconnected"}
+          </Badge>
+          <ThemeToggle />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -83,17 +87,17 @@ export default function MarketPage() {
               onClick={() => setSelectedSymbol(sym)}
               className={`cursor-pointer transition-all border ${
                 isSelected
-                  ? "bg-[#2D1B69] border-[#7C3AED]"
-                  : "bg-[#161B22] border-[#30363D]"
+                  ? "bg-brand-soft border-brand"
+                  : "bg-card border-border"
               }`}
             >
               <CardContent className="p-4">
-                <p className="text-xs font-medium mb-1 text-[#8B949E]">{sym}</p>
-                <p className="text-xl font-semibold text-[#E6EDF3]">
+                <p className="text-xs font-medium mb-1 text-muted-foreground">{sym}</p>
+                <p className="text-xl font-semibold text-foreground">
                   {p ? `$${p.price.toFixed(2)}` : "---"}
                 </p>
                 <p
-                  className={`text-xs mt-1 ${isUp ? "text-[#10B981]" : "text-[#EF4444]"}`}
+                  className={`text-xs mt-1 ${isUp ? "text-success" : "text-danger"}`}
                 >
                   {p
                     ? `${isUp ? "▲" : "▼"} ${Math.abs(p.changePercent).toFixed(2)}%`
@@ -106,7 +110,7 @@ export default function MarketPage() {
       </div>
 
       {isLoading ? (
-        <Skeleton className="w-full h-120 rounded-xl bg-[#161B22]" />
+        <Skeleton className="w-full h-120 rounded-xl bg-card" />
       ) : (
         <CandlestickChart data={chartData} symbol={selectedSymbol} />
       )}

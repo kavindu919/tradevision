@@ -38,6 +38,18 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
+    --color-success: var(--success);
+    --color-success-soft: var(--success-soft);
+    --color-success-border: var(--success-border);
+    --color-warning: var(--warning);
+    --color-warning-soft: var(--warning-soft);
+    --color-warning-border: var(--warning-border);
+    --color-danger: var(--danger);
+    --color-danger-soft: var(--danger-soft);
+    --color-danger-border: var(--danger-border);
+    --color-brand: var(--brand);
+    --color-brand-soft: var(--brand-soft);
+    --color-brand-border: var(--brand-border);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -48,24 +60,24 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --background: #F5F5F7;
+    --foreground: #17181C;
+    --card: #FFFFFF;
+    --card-foreground: #17181C;
+    --popover: #FFFFFF;
+    --popover-foreground: #17181C;
+    --primary: #7C3AED;
+    --primary-foreground: #FFFFFF;
+    --secondary: #F0F0F3;
+    --secondary-foreground: #17181C;
+    --muted: #F0F0F3;
+    --muted-foreground: #6E7178;
+    --accent: #EDE9FE;
+    --accent-foreground: #5B21B6;
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    --border: #E4E4E9;
+    --input: #E4E4E9;
+    --ring: #7C3AED;
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
@@ -80,27 +92,40 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+
+    --success: #16A34A;
+    --success-soft: #DCFCE7;
+    --success-border: #16A34A66;
+    --warning: #EA580C;
+    --warning-soft: #FFEDD5;
+    --warning-border: #EA580C66;
+    --danger: #DC2626;
+    --danger-soft: #FEE2E2;
+    --danger-border: #DC262666;
+    --brand: #7C3AED;
+    --brand-soft: #EDE9FE;
+    --brand-border: #7C3AED66;
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+    --background: #0D1117;
+    --foreground: #E6EDF3;
+    --card: #161B22;
+    --card-foreground: #E6EDF3;
+    --popover: #161B22;
+    --popover-foreground: #E6EDF3;
+    --primary: #7C3AED;
+    --primary-foreground: #F5F3FF;
+    --secondary: #21262D;
+    --secondary-foreground: #E6EDF3;
+    --muted: #21262D;
+    --muted-foreground: #8B949E;
+    --accent: #2D1B69;
+    --accent-foreground: #D9CBFF;
     --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
+    --border: #30363D;
+    --input: #30363D;
+    --ring: #7C3AED;
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
@@ -114,6 +139,19 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+
+    --success: #10B981;
+    --success-soft: #0D2818;
+    --success-border: #10B98140;
+    --warning: #F5A524;
+    --warning-soft: #2E2308;
+    --warning-border: #F5A52440;
+    --danger: #EF4444;
+    --danger-soft: #2D0A0A;
+    --danger-border: #EF444440;
+    --brand: #7C3AED;
+    --brand-soft: #2D1B69;
+    --brand-border: #7C3AED55;
 }
 
 @layer base {
