@@ -1,17 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { SearchBar } from "../../components/ui/searchbar";
+import { SearchBar } from "@/components/ui/searchbar";
 import StrategyFilter from "@/components/strategy/StrategyFilter";
 import { Badge } from "@/components/ui/badge";
 import { ArchiveRestore, Copy, Pen, RotateCcw } from "lucide-react";
-import { useState } from "react";
-import {
-  StrategyForm,
-  type StrategyInput,
-} from "@/components/strategy/StrategyForm";
-import { createStrategy } from "@/services/strategy.service";
-import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 
 const MOCK_STRATEGIES = [
@@ -82,35 +75,22 @@ const MOCK_STRATEGIES = [
 ];
 
 const Strategy = () => {
-  const handleCreateStrategy = async () => {
-    try {
-      const a: number = 10;
-    } catch {
-      console.log("");
-    }
-  };
-
   return (
-    <div className="min-h-screen p-6 bg-background space-y-4">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-foreground">Strategies</h1>
-        <div className="flex flex-row items-center space-x-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="cursor-pointer border border-dashed border-border text-muted-foreground/70 hover:text-muted-foreground"
-          >
-            preview: empty state
-          </Button>
-          <Link href="/">
-            <Button variant="default" size="lg" className="cursor-pointer">
-              + New strategy
-            </Button>
-          </Link>
-          <ThemeToggle />
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-semibold text-foreground">Strategies</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Design, test and manage your trading strategies.
+          </p>
         </div>
+        <Link href="/strategies/create">
+          <Button size="lg" className="cursor-pointer">
+            + New strategy
+          </Button>
+        </Link>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="cursor-pointer transition-all border bg-card border-border">
           <CardContent>
             <p className="text-xs font-medium mb-1 text-muted-foreground">
@@ -144,11 +124,11 @@ const Strategy = () => {
           </CardContent>
         </Card>
       </div>
-      <div className="flex flex-row w-full items-center justify-between gap-4">
+      <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <SearchBar />
         <StrategyFilter />
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 mb-6">
         {MOCK_STRATEGIES.map((item) => (
           <Card
             key={item.id}

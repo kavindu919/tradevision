@@ -12,7 +12,7 @@ import { ChevronDown } from "lucide-react";
 const StrategyFilter = () => {
   const [select, setSelect] = useState<string>("all");
   return (
-    <div className="flex flex-row items-center gap-2">
+    <div className="flex flex-row flex-wrap items-center gap-2">
       <Button
         size="lg"
         className={`cursor-pointer border ${
