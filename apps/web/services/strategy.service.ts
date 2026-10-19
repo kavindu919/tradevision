@@ -1,5 +1,12 @@
 import api from "@/lib/api";
-import type { StrategyInput } from "@/components/strategy/StrategyForm";
+
+export type StrategyInput = {
+  name: string;
+  description: string;
+  code: string;
+  asset_symbol: string;
+  timeframe: string;
+};
 
 export const getStrategyVersions = (id: string) => {
   const res = api.get(`/strategies/${id}/versions`);
