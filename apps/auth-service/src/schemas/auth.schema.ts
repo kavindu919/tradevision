@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "@tradevision/validation";
 
 export const registerSchema = z.object({
   body: z.object({
