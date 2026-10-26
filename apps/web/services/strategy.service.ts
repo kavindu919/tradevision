@@ -16,3 +16,9 @@ export const getStrategyVersions = (id: string) => {
 export const createStrategy = (data: StrategyInput) => {
   return api.post("/strategies", data);
 };
+
+export const getStrategies = async () => {
+  const res = await api.get("/strategies");
+  console.log("res", res.data);
+  return res;
+};

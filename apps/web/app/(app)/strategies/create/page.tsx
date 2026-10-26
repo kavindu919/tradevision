@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { DEFAULT_CODE, TIMEFRAMES } from "@/lib/utils";
 import { StrategyEditor } from "@/components/strategy/StrategyEditor";
 import { createStrategy } from "@/services/strategy.service";
+import { StrategyTemplate } from "@/lib/strategyTemplates";
+import { TemplateGallery } from "@/components/strategy/TemplateGallery";
 
 export type StrategyInput = {
   name: string;
@@ -36,6 +38,17 @@ const StrategyCreateForm = () => {
   const handleCodeChange = (code: string) =>
     setData((prev) => ({ ...prev, code }));
 
+  const applyTemplate = (e: StrategyTemplate) => {
+    setData((prev) => ({
+      ...prev,
+      name: e.name,
+      description: e.description,
+      asset_symbol: e.asset_symbol,
+      timeframe: e.timeframe,
+      code: e.code,
+    }));
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -57,6 +70,13 @@ const StrategyCreateForm = () => {
         <p className="mt-1 text-sm text-muted-foreground">
           Define your strategy and write its trading logic.
         </p>
+      </div>
+
+      <div>
+        <label className="mb-1 block text-sm text-muted-foreground">
+          Start from a template
+        </label>
+        <TemplateGallery onSelect={applyTemplate} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

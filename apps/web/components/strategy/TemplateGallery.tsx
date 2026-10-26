@@ -24,7 +24,7 @@ export const TemplateGallery = ({ onSelect }: TemplateGalleryProps) => {
       {STRATEGY_TEMPLATES.map((template) => (
         <button
           key={template.id}
-          className="text-left p-4 rounded-xl border border-border bg-card hover:bg-muted hover:border-brand transition-all group"
+          className="text-left cursor-pointer p-4 rounded-xl border border-border bg-card hover:bg-muted hover:border-brand transition-all group"
           onClick={() => onSelect(template)}
         >
           <div className="font-medium text-foreground group-hover:text-brand transition-colors mb-1">
