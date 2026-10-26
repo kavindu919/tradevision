@@ -40,6 +40,34 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+@theme {
+    --animate-grid-pan: gridPan 22s linear infinite;
+    --animate-aura: aura 9s ease-in-out infinite;
+    --animate-drift-a: driftA 20s ease-in-out infinite;
+    --animate-drift-b: driftB 26s ease-in-out infinite;
+    --animate-drift-c: driftC 23s ease-in-out infinite;
+
+    @keyframes gridPan {
+        to { background-position: 54px 54px; }
+    }
+    @keyframes aura {
+        0%, 100% { opacity: 0.45; }
+        50% { opacity: 0.9; }
+    }
+    @keyframes driftA {
+        0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+        50% { transform: translate3d(60px, 40px, 0) scale(1.15); }
+    }
+    @keyframes driftB {
+        0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+        50% { transform: translate3d(-52px, 32px, 0) scale(1.2); }
+    }
+    @keyframes driftC {
+        0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+        50% { transform: translate3d(40px, -50px, 0) scale(1.12); }
+    }
+}
+
 :root {
     --background: #F5F5F7;
     --foreground: #17181C;
