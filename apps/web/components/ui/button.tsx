@@ -9,11 +9,12 @@ const variants = {
   danger: "bg-danger text-white hover:bg-danger/90",
 } as const;
 
+// Shared size scale — keep in sync with <Input> so fields and buttons align in a row.
 const sizes = {
-  sm: "h-7 gap-1.5 px-2.5 text-xs",
-  default: "h-8 gap-1.5 px-3 text-sm",
-  lg: "h-9 gap-2 px-4 text-sm",
-  icon: "size-8",
+  sm: "h-8 gap-1.5 px-3 text-sm",
+  md: "h-9 gap-2 px-4 text-sm",
+  lg: "h-11 gap-2 px-5 text-base",
+  icon: "size-9",
 } as const;
 
 export type ButtonProps = React.ComponentProps<"button"> & {
@@ -24,7 +25,7 @@ export type ButtonProps = React.ComponentProps<"button"> & {
 export function Button({
   className,
   variant = "default",
-  size = "default",
+  size = "md",
   type = "button",
   ...props
 }: ButtonProps) {

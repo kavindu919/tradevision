@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "@tradevision/validation";
 
 export const twelvedataSchema = z.object({
   query: z.object({

@@ -1,4 +1,4 @@
-import { ZodSchema } from "zod";
+import { ZodSchema } from "@tradevision/validation";
 import { Request, Response, NextFunction } from "express";
 
 export const validate =

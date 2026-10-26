@@ -22,7 +22,7 @@
     "resend": "^6.9.3",
     "tsx": "^4.19.2",
     "typescript": "^5.9.3",
-    "zod": "^4.3.6"
+    "@tradevision/validation": "workspace:*"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
