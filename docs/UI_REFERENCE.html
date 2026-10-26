@@ -1,0 +1,1719 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>TradeVision UI Reference</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --background: #F5F5F7;
+    --foreground: #17181C;
+    --card: #FFFFFF;
+    --muted: #F0F0F3;
+    --muted-foreground: #6E7178;
+    --accent: #EDE9FE;
+    --accent-foreground: #5B21B6;
+    --border: #E4E4E9;
+    --primary: #7C3AED;
+    --primary-foreground: #FFFFFF;
+    --success: #16A34A;
+    --success-soft: #DCFCE7;
+    --success-border: #16A34A66;
+    --warning: #EA580C;
+    --warning-soft: #FFEDD5;
+    --warning-border: #EA580C66;
+    --danger: #DC2626;
+    --danger-soft: #FEE2E2;
+    --danger-border: #DC262666;
+    --brand: #7C3AED;
+    --brand-soft: #EDE9FE;
+    --editor-bg: #FFFFFF;
+    --editor-line: #9A9DA6;
+    --editor-kw: #AF00DB;
+    --editor-num: #098658;
+    --editor-fn: #795E26;
+    --editor-com: #008000;
+    --shadow: 0 1px 2px rgba(23,24,28,0.06), 0 4px 16px rgba(23,24,28,0.06);
+    --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --background: #0D1117; --foreground: #E6EDF3; --card: #161B22; --muted: #21262D;
+      --muted-foreground: #8B949E; --accent: #2D1B69; --accent-foreground: #D9CBFF; --border: #30363D;
+      --primary: #7C3AED; --primary-foreground: #F5F3FF;
+      --success: #10B981; --success-soft: #0D2818; --success-border: #10B98140;
+      --warning: #F5A524; --warning-soft: #2E2308; --warning-border: #F5A52440;
+      --danger: #EF4444; --danger-soft: #2D0A0A; --danger-border: #EF444440;
+      --brand: #8B5CF6; --brand-soft: #2D1B69;
+      --editor-bg: #0D1117; --editor-line: #6E7681; --editor-kw: #C586C0; --editor-num: #B5CEA8;
+      --editor-fn: #DCDCAA; --editor-com: #6A9955;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 6px 20px rgba(0,0,0,0.3);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --background: #0D1117; --foreground: #E6EDF3; --card: #161B22; --muted: #21262D;
+    --muted-foreground: #8B949E; --accent: #2D1B69; --accent-foreground: #D9CBFF; --border: #30363D;
+    --primary: #7C3AED; --primary-foreground: #F5F3FF;
+    --success: #10B981; --success-soft: #0D2818; --success-border: #10B98140;
+    --warning: #F5A524; --warning-soft: #2E2308; --warning-border: #F5A52440;
+    --danger: #EF4444; --danger-soft: #2D0A0A; --danger-border: #EF444440;
+    --brand: #8B5CF6; --brand-soft: #2D1B69;
+    --editor-bg: #0D1117; --editor-line: #6E7681; --editor-kw: #C586C0; --editor-num: #B5CEA8;
+    --editor-fn: #DCDCAA; --editor-com: #6A9955;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 6px 20px rgba(0,0,0,0.3);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--sans); font-size: 13.5px; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: inherit; }
+  .num, td.r, .kpi .value, .kpi .delta, .sym .p, .sym .c, .wl-row .px, .heat td, kbd, pre.code, code, .editor-bar, .ticker { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted-foreground); }
+  .up { color: var(--success); }
+  .down { color: var(--danger); }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--brand); outline-offset: 2px;
+  }
+
+  /* ---------- mock banner ---------- */
+  .mockbar {
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap;
+    padding: 0.4rem 1rem; font-size: 11px; color: var(--muted-foreground);
+    background: var(--muted); border-bottom: 1px dashed var(--border);
+  }
+  .mockbar select { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.2rem 0.4rem; font-size: 11px; }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+    border-radius: 6px; border: 1px solid transparent; font-size: 13px; font-weight: 500;
+    padding: 0.55rem 0.9rem; cursor: pointer; white-space: nowrap; background: none;
+    transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, filter 120ms ease;
+  }
+  .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .btn-primary { background: var(--primary); color: var(--primary-foreground); }
+  .btn-primary:hover { filter: brightness(1.1); }
+  .btn-outline { border-color: var(--border); background: var(--card); }
+  .btn-outline:hover { background: var(--muted); }
+  .btn-ghost { color: var(--muted-foreground); }
+  .btn-ghost:hover { background: var(--muted); color: var(--foreground); }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-danger:disabled, .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
+  .btn-sm { padding: 0.35rem 0.6rem; font-size: 11px; }
+  .btn-block { width: 100%; }
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border); background: var(--card);
+    color: var(--muted-foreground); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; position: relative;
+  }
+  .icon-btn:hover { color: var(--foreground); background: var(--muted); }
+  .icon-btn svg { width: 15px; height: 15px; }
+  .icon-btn.bare { border: none; background: none; width: 26px; height: 26px; }
+  .icon-btn.bare svg { width: 14px; height: 14px; }
+
+  /* ---------- form controls ---------- */
+  .field label { display: block; font-size: 11px; color: var(--muted-foreground); margin-bottom: 0.35rem; }
+  .input, .select, .textarea {
+    width: 100%; background: var(--muted); border: 1px solid var(--border); border-radius: 6px;
+    padding: 0.55rem 0.7rem; font-size: 13.5px;
+  }
+  .textarea { resize: none; }
+  .input:hover, .select:hover, .textarea:hover { border-color: var(--muted-foreground); }
+  .hint { font-size: 11px; color: var(--muted-foreground); margin-top: 0.3rem; }
+  .switch { position: relative; width: 34px; height: 20px; flex-shrink: 0; }
+  .switch input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
+  .switch span { position: absolute; inset: 0; background: var(--border); border-radius: 99px; transition: background-color 120ms ease; pointer-events: none; }
+  .switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform 120ms ease; }
+  .switch input:checked + span { background: var(--primary); }
+  .switch input:checked + span::after { transform: translateX(14px); }
+  .switch input:focus-visible + span { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  /* ---------- pills, badges, chips ---------- */
+  .status { font-size: 12.5px; font-weight: 500; text-transform: capitalize; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .status.s-active, .status.s-completed, .status.s-live { color: var(--success); }
+  .status.s-paused, .status.s-running, .status.s-queued { color: var(--warning); }
+  .status.s-failed { color: var(--danger); }
+  .status.s-archived { color: var(--muted-foreground); }
+  .chip { font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: 4px; padding: 0.1rem 0.4rem; white-space: nowrap; }
+  .tag { font-size: 10px; padding: 0.1rem 0.4rem; border-radius: 99px; background: var(--muted); color: var(--muted-foreground); }
+  .seg { display: inline-flex; background: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 2px; gap: 2px; }
+  .seg button { border: none; background: none; padding: 0.3rem 0.6rem; font-size: 11px; border-radius: 6px; cursor: pointer; color: var(--muted-foreground); }
+  .seg button[aria-pressed="true"] { background: var(--card); color: var(--foreground); box-shadow: var(--shadow); }
+  .pill { background: var(--card); border: 1px solid var(--border); font-size: 12.5px; padding: 0.42rem 0.75rem; border-radius: 6px; cursor: pointer; }
+  .pill:hover { border-color: var(--muted-foreground); }
+  .pill[aria-pressed="true"] { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+
+  /* ---------- cards ---------- */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; }
+  .card-pad { padding: 1.1rem 1.2rem; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.8rem 1.1rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .card-head h3 { font-size: 13.5px; font-weight: 600; }
+  .card-head .sub { font-size: 12px; color: var(--muted-foreground); margin-top: 0.1rem; }
+  .card-body { padding: 1rem 1.1rem; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .kpi { padding: 0.85rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; box-shadow: 1px 0 0 var(--border), 0 1px 0 var(--border); }
+  .kpi .label { font-size: 12px; color: var(--muted-foreground); }
+  .kpi .value { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
+  .kpi .delta { font-size: 11px; font-variant-numeric: tabular-nums; }
+  .kpi svg.spark { width: 100%; height: 28px; margin-top: 0.15rem; }
+
+  /* ---------- tables ---------- */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); padding: 0.6rem 1.2rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 0.65rem 1.2rem; border-bottom: 1px solid var(--border); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: none; }
+  th.r, td.r { text-align: right; }
+  tbody tr.clickable { cursor: pointer; }
+  tbody tr.clickable:hover td { background: var(--muted); }
+
+  /* ---------- app shell ---------- */
+  .app { display: grid; grid-template-columns: 228px minmax(0, 1fr); min-height: 100vh; }
+  .sidebar {
+    position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 1.2rem;
+    padding: 1rem 0.75rem; background: var(--card); border-right: 1px solid var(--border);
+  }
+  .logo { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; font-size: 14px; padding: 0.25rem 0.5rem; cursor: pointer; text-decoration: none; }
+  .logo .mark { display: inline-flex; color: var(--foreground); }
+  .logo .mark svg { width: 20px; height: 20px; }
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .nav-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted-foreground); padding: 0 0.6rem; margin: 0.6rem 0 0.3rem; }
+  .nav a { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.6rem; border-radius: 8px; text-decoration: none; color: var(--muted-foreground); font-size: 12.5px; font-weight: 500; }
+  .nav a svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .nav a:hover { background: var(--muted); color: var(--foreground); }
+  .nav a[aria-current="page"] { background: var(--muted); color: var(--foreground); font-weight: 600; }
+  .nav a .count { margin-left: auto; font-size: 10px; background: var(--muted); color: var(--muted-foreground); border-radius: 99px; padding: 0.05rem 0.4rem; }
+  .side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 0.6rem; }
+  .user { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border); }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--accent-foreground); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0; }
+  .user .who { min-width: 0; }
+  .user .who b { display: block; font-size: 12px; }
+  .user .who span { font-size: 10px; color: var(--muted-foreground); }
+
+  .main { min-width: 0; display: flex; flex-direction: column; }
+  .topbar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1.5rem;
+    background: color-mix(in srgb, var(--background) 88%, transparent); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .crumbs { font-size: 12px; color: var(--muted-foreground); display: flex; gap: 0.4rem; align-items: center; min-width: 0; }
+  .crumbs b { color: var(--foreground); font-weight: 600; }
+  .gsearch { margin-left: auto; position: relative; width: min(320px, 40vw); }
+  .gsearch svg { position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%); width: 13px; height: 13px; color: var(--muted-foreground); }
+  .gsearch input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.45rem 0.6rem 0.45rem 1.9rem; font-size: 12px; }
+  .gsearch kbd { position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: 4px; padding: 0 0.3rem; }
+  .badge-dot { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; border-radius: 99px; background: var(--danger); color: #fff; font-size: 9px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px; }
+
+  .notif-panel {
+    position: absolute; right: 0; top: calc(100% + 8px); width: min(360px, 90vw); z-index: 30;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .notif-panel .head { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 700; }
+  .notif { display: flex; gap: 0.65rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .notif:last-child { border-bottom: none; }
+  .notif .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 0.3rem; flex-shrink: 0; }
+  .notif.read .dot { background: transparent !important; border: 1px solid var(--border); }
+  .notif b { display: block; font-size: 12px; margin-bottom: 0.15rem; }
+  .notif span { color: var(--muted-foreground); font-size: 11px; }
+
+  .content { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; max-width: 1320px; width: 100%; }
+  .page-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
+  .page-head h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.015em; }
+  .page-head p { margin-top: 0.3rem; color: var(--muted-foreground); font-size: 12.5px; max-width: 60ch; }
+  .page-head .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .back { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 12px; color: var(--muted-foreground); cursor: pointer; background: none; border: none; padding: 0; margin-bottom: 0.5rem; }
+  .back svg { width: 13px; height: 13px; }
+  .back:hover { color: var(--foreground); }
+
+  .cols-2 { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+  .cols-even { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; align-items: start; }
+  .stack { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
+
+  @media (max-width: 1080px) { .cols-2, .cols-even { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; flex-direction: row; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    .nav { flex-direction: row; }
+    .nav-label, .side-foot, .nav a .count { display: none; }
+    .nav a span.lbl { display: none; }
+    .gsearch { display: none; }
+    .topbar { padding: 0.6rem 1rem; }
+    .crumbs + .spacer { margin-left: auto; }
+    .content { padding: 1rem; }
+  }
+
+  /* ---------- charts ---------- */
+  .chart { display: block; width: 100%; height: auto; }
+  .chart text { font-family: var(--mono); font-size: 11px; fill: var(--muted-foreground); }
+  .legend { display: flex; gap: 1rem; font-size: 11px; color: var(--muted-foreground); flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 0.35rem; }
+
+  /* ---------- watchlist rows ---------- */
+  .wl-row { display: grid; grid-template-columns: minmax(0, 1fr) 72px auto; gap: 0.75rem; align-items: center; padding: 0.65rem 1.2rem; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .wl-row:last-child { border-bottom: none; }
+  .wl-row:hover { background: var(--muted); }
+  .wl-row b { font-size: 12.5px; }
+  .wl-row .sub { font-size: 11px; color: var(--muted-foreground); }
+  .wl-row svg { width: 72px; height: 26px; }
+  .wl-row .px { text-align: right; font-variant-numeric: tabular-nums; }
+  .wl-row .px div:first-child { font-weight: 600; }
+  .wl-row .px div:last-child { font-size: 11px; }
+
+  .sym-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.6rem; }
+  .sym { padding: 0.75rem 0.9rem; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 0.2rem; }
+  .sym:hover { border-color: var(--muted-foreground); }
+  .sym[aria-pressed="true"] { border-color: var(--foreground); box-shadow: inset 0 0 0 1px var(--foreground); }
+  .sym .t { font-size: 11px; color: var(--muted-foreground); }
+  .sym .p { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .sym .c { font-size: 11px; font-variant-numeric: tabular-nums; }
+
+  /* ---------- strategy cards ---------- */
+  .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 0.9rem; }
+  .s-card { padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .s-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; }
+  .s-name { font-size: 13.5px; font-weight: 700; }
+  .chips { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .s-desc { font-size: 12px; color: var(--muted-foreground); line-height: 1.55; }
+  .s-foot { margin-top: auto; padding-top: 0.6rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted-foreground); }
+  .s-foot .acts { display: flex; gap: 0.1rem; }
+  .s-foot .num { font-family: var(--sans); white-space: nowrap; }
+  .stat-line { display: flex; gap: 1rem; font-size: 11px; color: var(--muted-foreground); }
+  .stat-line b { color: var(--foreground); font-weight: 600; }
+  .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+  .search { flex: 1 1 16rem; position: relative; }
+  .search svg { position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%); width: 13px; height: 13px; color: var(--muted-foreground); }
+  .search input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.7rem 0.5rem 2rem; font-size: 12px; }
+  .empty { padding: 3rem 1.5rem; text-align: center; color: var(--muted-foreground); border: 1px dashed var(--border); border-radius: 6px; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+  .empty b { color: var(--foreground); font-size: 13px; }
+
+  /* ---------- editor ---------- */
+  .editor { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .editor-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0.85rem; background: var(--muted); border-bottom: 1px solid var(--border); font-size: 11px; color: var(--muted-foreground); }
+  .editor-bar .dots { display: flex; gap: 0.3rem; }
+  .editor-bar .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+  pre.code { margin: 0; background: var(--editor-bg); padding: 0.9rem 0; font-size: 12.5px; line-height: 1.65; overflow-x: auto; min-height: 280px; }
+  pre.code .ln { display: inline-block; width: 2.6rem; padding-right: 1rem; text-align: right; color: var(--editor-line); user-select: none; }
+  .t-kw { color: var(--editor-kw); } .t-num { color: var(--editor-num); } .t-fn { color: var(--editor-fn); } .t-com { color: var(--editor-com); font-style: italic; }
+  .hintbar { display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 0.55rem 0.85rem; border-top: 1px solid var(--border); background: var(--muted); font-size: 11px; color: var(--muted-foreground); }
+  .hintbar code { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 0 0.3rem; color: var(--foreground); }
+
+  .tpl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6rem; }
+  .tpl { text-align: left; padding: 0.8rem 0.9rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.35rem; }
+  .tpl:hover { border-color: var(--muted-foreground); }
+  .tpl[aria-pressed="true"] { border-color: var(--foreground); box-shadow: inset 0 0 0 1px var(--foreground); }
+  .tpl b { font-size: 12.5px; }
+  .tpl p { font-size: 11px; color: var(--muted-foreground); line-height: 1.45; }
+  .tpl .tags { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: auto; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+  .form-grid .full { grid-column: 1 / -1; }
+  @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+  .form-actions { display: flex; justify-content: flex-end; gap: 0.5rem; flex-wrap: wrap; }
+
+  .version { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.35rem; }
+  .version:last-child { border-bottom: none; }
+  .version.current { background: var(--muted); }
+  .version .row { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+  .version b { font-size: 12.5px; }
+  .version .note { font-size: 11.5px; color: var(--muted-foreground); }
+  .version .cur { font-size: 12px; font-weight: 500; color: var(--muted-foreground); }
+
+  /* ---------- backtest results ---------- */
+  .progress { height: 8px; border-radius: 99px; background: var(--muted); overflow: hidden; }
+  .progress > div { height: 100%; background: var(--primary); border-radius: 99px; transition: width 120ms linear; }
+  .progress.sm { height: 5px; width: 110px; display: inline-block; vertical-align: middle; margin-right: 0.45rem; }
+  .run-card { padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; align-items: stretch; max-width: 560px; margin: 2rem auto; text-align: center; }
+  .run-card h2 { font-size: 16px; }
+  .heat { width: 100%; border-collapse: separate; border-spacing: 3px; font-size: 11px; }
+  .heat th { padding: 0.2rem; text-align: center; border: none; font-size: 10px; }
+  .heat td { padding: 0.45rem 0.2rem; text-align: center; border: none; border-radius: 4px; font-variant-numeric: tabular-nums; }
+  .heat td.yr { font-weight: 700; background: var(--muted); }
+  .heat th.y, .heat td.y { text-align: left; color: var(--muted-foreground); font-weight: 600; padding-right: 0.5rem; background: none; }
+  .ai-score { display: flex; align-items: center; gap: 1rem; }
+  .meter { flex: 1; display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; }
+  .meter i { height: 8px; border-radius: 2px; background: var(--muted); }
+  .meter i.on { background: var(--warning); }
+  .ai-score .score { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .ai-section { display: flex; flex-direction: column; gap: 0.45rem; }
+  .ai-section h4 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); }
+  .ai-section ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.4rem; font-size: 12px; line-height: 1.55; }
+  .ai-text { font-size: 12.5px; line-height: 1.65; max-width: 70ch; }
+  .cond { display: grid; grid-template-columns: 110px 1fr 64px; gap: 0.6rem; align-items: center; font-size: 11.5px; }
+  .cond .bar { height: 6px; border-radius: 99px; background: var(--muted); position: relative; overflow: hidden; }
+  .cond .bar i { position: absolute; top: 0; bottom: 0; border-radius: 99px; }
+
+  /* ---------- settings ---------- */
+  .set-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.85rem 1.2rem; border-bottom: 1px solid var(--border); }
+  .set-row:last-child { border-bottom: none; }
+  .set-row b { display: block; font-size: 12.5px; }
+  .set-row span { font-size: 11.5px; color: var(--muted-foreground); }
+  .keybox { background: var(--muted); border: 1px dashed var(--brand); border-radius: 8px; padding: 0.7rem 0.9rem; font-size: 12px; word-break: break-all; }
+  .danger-zone { border-color: var(--danger-border); }
+  .danger-zone .card-head h3 { color: var(--danger); }
+
+  /* ---------- landing & auth ---------- */
+  .land { min-height: 100vh; display: flex; flex-direction: column; }
+  .land-nav { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; gap: 1rem; }
+  .land-nav .links { display: flex; gap: 0.5rem; align-items: center; }
+  .hero { max-width: 1120px; margin: 0 auto; width: 100%; padding: 4.5rem 2rem 2.5rem; }
+  .hero h1 { font-size: clamp(32px, 4.8vw, 56px); line-height: 1.04; letter-spacing: -0.035em; font-weight: 600; max-width: 16ch; }
+  .hero .lede { margin-top: 1.2rem; font-size: 17px; line-height: 1.6; color: var(--muted-foreground); max-width: 54ch; }
+  .hero .ctas { display: flex; gap: 0.6rem; margin-top: 1.8rem; flex-wrap: wrap; align-items: center; }
+  .hero .ctas .btn { padding: 0.7rem 1.15rem; font-size: 14px; }
+  .hero .fine { font-size: 13px; color: var(--muted-foreground); margin-left: 0.4rem; }
+  .shot { max-width: 1120px; margin: 0 auto 4.5rem; width: calc(100% - 4rem); border: 1px solid var(--border); border-radius: 8px; background: var(--card); overflow: hidden; box-shadow: var(--shadow); }
+  .shot-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 0.55rem 1rem; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 12px; color: var(--muted-foreground); background: var(--muted); }
+  .shot-body { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); }
+  .shot-body pre.code { min-height: 0; border-right: 1px solid var(--border); }
+  .shot-body .kpis { border: none; border-radius: 0; border-bottom: 1px solid var(--border); }
+  .shot-body .chart-pad { padding: 1rem 1rem 0.6rem; }
+  .spec { max-width: 1120px; margin: 0 auto; padding: 0 2rem 4.5rem; width: 100%; }
+  .spec h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+  .spec dl { margin: 0; display: grid; grid-template-columns: 220px minmax(0, 1fr); border-top: 1px solid var(--border); }
+  .spec dt, .spec dd { margin: 0; padding: 1.05rem 0; border-bottom: 1px solid var(--border); font-size: 14.5px; }
+  .spec dt { font-weight: 600; }
+  .spec dd { color: var(--muted-foreground); line-height: 1.6; max-width: 66ch; }
+  @media (max-width: 860px) {
+    .hero { padding: 2.5rem 1rem 2rem; }
+    .shot { width: calc(100% - 2rem); }
+    .shot-body { grid-template-columns: 1fr; }
+    .shot-body pre.code { border-right: none; border-bottom: 1px solid var(--border); }
+    .spec { padding: 0 1rem 3rem; }
+    .spec dl { grid-template-columns: 1fr; }
+    .spec dt { border-bottom: none; padding-bottom: 0.2rem; }
+  }
+  .ticker { display: flex; gap: 1.6rem; align-items: center; padding: 0.4rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--card); font-size: 12px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+  .ticker b { font-family: var(--sans); font-weight: 600; margin-right: 0.4rem; }
+  .ticker .mkt { margin-left: auto; font-family: var(--sans); color: var(--muted-foreground); }
+  @media (max-width: 860px) { .ticker { padding: 0.4rem 1rem; } }
+  .land-foot { margin-top: auto; border-top: 1px solid var(--border); padding: 1.2rem 2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-size: 11.5px; color: var(--muted-foreground); }
+
+  .auth { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+  .auth-card { width: 100%; max-width: 400px; padding: 2rem 1.75rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: var(--shadow); }
+  .auth-card .logo { justify-content: center; margin-bottom: 0.4rem; }
+  .auth-card h1 { font-size: 18px; text-align: center; }
+  .auth-card .sub { text-align: center; color: var(--muted-foreground); font-size: 12px; margin-top: -0.6rem; }
+  .divider { display: flex; align-items: center; gap: 0.6rem; font-size: 11px; color: var(--muted-foreground); }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+  .auth-alt { text-align: center; font-size: 12px; color: var(--muted-foreground); }
+  .link { color: var(--brand); cursor: pointer; background: none; border: none; padding: 0; font-weight: 600; font-size: inherit; text-decoration: none; }
+  .link:hover { text-decoration: underline; }
+
+  .toast {
+    position: fixed; bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translate(-50%, 0.5rem); z-index: 50;
+    background: var(--card); border: 1px solid var(--border); padding: 0.65rem 1rem; border-radius: 10px; box-shadow: var(--shadow);
+    font-size: 12.5px; display: flex; align-items: center; gap: 0.5rem; opacity: 0; pointer-events: none; transition: opacity 160ms ease, transform 160ms ease; max-width: 90vw;
+  }
+  .toast svg { width: 14px; height: 14px; color: var(--success); flex-shrink: 0; }
+  .toast.visible { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  .toast-act { margin-left: 0.5rem; background: none; border: none; color: var(--brand); font-weight: 600; cursor: pointer; padding: 0.15rem 0.35rem; border-radius: 4px; }
+  .toast-act:hover { background: var(--muted); }
+  [hidden] { display: none !important; }
+
+  /* ---------- menus ---------- */
+  .menu-anchor { position: relative; }
+  .menu { position: absolute; right: 0; top: calc(100% + 4px); z-index: 25; min-width: 170px; padding: 4px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+  .menu button { display: flex; align-items: center; gap: 0.55rem; width: 100%; text-align: left; background: none; border: none; padding: 0.45rem 0.6rem; border-radius: 4px; font-size: 13px; cursor: pointer; }
+  .menu button:hover, .menu button:focus-visible { background: var(--muted); outline: none; }
+  .menu button svg { width: 14px; height: 14px; color: var(--muted-foreground); }
+  .menu .danger, .menu .danger svg { color: var(--danger); }
+  .menu hr { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+
+  /* ---------- whole-card links ---------- */
+  .s-card { position: relative; }
+  .s-card:hover { border-color: var(--muted-foreground); }
+  .s-link { color: inherit; text-decoration: none; }
+  .s-link::after { content: ""; position: absolute; inset: 0; border-radius: 6px; }
+  .s-link:focus-visible { outline: none; }
+  .s-link:focus-visible::after { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .s-foot .acts { position: relative; z-index: 1; align-items: center; gap: 0.35rem; }
+
+  /* ---------- loading / empty / error ---------- */
+  .sk { background: var(--muted); border-radius: 4px; animation: sk-pulse 1.4s ease-in-out infinite; }
+  @keyframes sk-pulse { 50% { opacity: 0.45; } }
+  .state { padding: 3.5rem 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+  .state h2 { font-size: 16px; font-weight: 600; }
+  .state p { color: var(--muted-foreground); max-width: 46ch; line-height: 1.6; }
+  .state .ic { width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--muted); color: var(--muted-foreground); margin-bottom: 0.3rem; }
+  .state .ic svg { width: 18px; height: 18px; }
+  .state.error .ic { background: var(--danger-soft); color: var(--danger); }
+  .state .actions { display: flex; gap: 0.5rem; margin-top: 0.4rem; }
+  .state code { font-size: 11.5px; color: var(--muted-foreground); }
+
+  /* ---------- validation ---------- */
+  .input[aria-invalid="true"], .select[aria-invalid="true"] { border-color: var(--danger); }
+  .err { font-size: 12px; color: var(--danger); margin-top: 0.35rem; }
+  .dirty { font-size: 12.5px; color: var(--warning); align-self: center; }
+
+  /* ---------- sortable tables, pagination ---------- */
+  .th-sort { background: none; border: none; padding: 0; font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem; }
+  .th-sort:hover, th[aria-sort] .th-sort { color: var(--foreground); }
+  .th-sort .arr { opacity: 0.45; }
+  th[aria-sort] .th-sort .arr { opacity: 1; }
+  .pager { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.6rem 1.1rem; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--muted-foreground); }
+  .pager .btns { display: flex; gap: 0.4rem; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ---------- chart hover ---------- */
+  .chart-wrap { position: relative; border-radius: 4px; }
+  .chart-wrap:focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
+  .tip { position: absolute; top: 4px; min-width: 175px; padding: 0.5rem 0.65rem; background: var(--card); border: 1px solid var(--border); border-radius: 6px; box-shadow: var(--shadow); font-size: 12px; pointer-events: none; display: flex; flex-direction: column; gap: 0.25rem; z-index: 2; }
+  .tip b { font-weight: 600; }
+  .tip span { display: flex; align-items: center; gap: 0.45rem; color: var(--muted-foreground); }
+  .tip i { width: 10px; height: 2px; border-radius: 2px; }
+  .tip em { font-style: normal; font-family: var(--mono); color: var(--foreground); margin-left: auto; padding-left: 1rem; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } .sk { animation: none; } }
+</style>
+
+<div class="mockbar">
+  <span>Reference mockup · static sample data</span>
+  <label>Screen
+    <select id="screenPicker" aria-label="Jump to screen"></select>
+  </label>
+  <label>Data
+    <select id="statePicker" aria-label="Preview data state">
+      <option value="normal">Loaded</option><option value="loading">Loading</option><option value="empty">Empty</option><option value="error">Error</option>
+    </select>
+  </label>
+</div>
+<div id="root"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ================= icons ================= */
+const I = {
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  candles: '<path d="M9 4v4M9 16v4M15 3v4M15 14v7"/><rect x="7" y="8" width="4" height="8" rx="1"/><rect x="13" y="7" width="4" height="7" rx="1"/>',
+  code: '<path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/>',
+  history: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 3"/>',
+  wallet: '<path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h14a2 2 0 0 1 2 2v3h-4a2 2 0 0 0 0 4h4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"/>',
+  users: '<circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.1a4 4 0 0 1 0 7.8M21 21v-2a4 4 0 0 0-3-3.9"/>',
+  sliders: '<path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>',
+  bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  moon: '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  play: '<path d="m7 4 13 8-13 8V4z"/>',
+  copy: '<rect x="9" y="9" width="12" height="12" rx="1"/><path d="M5 15V4a1 1 0 0 1 1-1h11"/>',
+  edit: '<path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
+  archive: '<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8M10 13h4"/>',
+  logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  back: '<path d="m12 19-7-7 7-7M19 12H5"/>',
+  sparkle: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+  key: '<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+  trash: '<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+  pause: '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
+  flask: '<path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7 15h10"/>',
+  more: '<circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/>',
+  alert: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.5"/>',
+  refresh: '<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/>',
+};
+const ic = (name, extra = "") => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra}>${I[name]}</svg>`;
+const LOGO = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 1.5v3.5M6 13v5.5M14 1v4.5M14 12.5V19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="3.4" y="5" width="5.2" height="8" rx="1" fill="currentColor"/><rect x="11.4" y="5.5" width="5.2" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+
+/* ================= helpers ================= */
+function rng(seed) {
+  return function () {
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const fmtMoney = (n, d = 2) => (n < 0 ? "-$" : "$") + Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+const fmtPct = (n, sign = true) => (sign && n > 0 ? "+" : "") + n.toFixed(2) + "%";
+const fmtSigned = (n) => (n > 0 ? "+" : n < 0 ? "-" : "") + fmtMoney(Math.abs(n)).replace("$", "$");
+const cls = (n) => (n > 0 ? "up" : n < 0 ? "down" : "muted");
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+function walkTo(n, start, end, vol, seed) {
+  const r = rng(seed); const raw = [start];
+  for (let i = 1; i < n; i++) raw.push(raw[i - 1] * (1 + (r() - 0.5) * vol));
+  const k = Math.log(end / raw[n - 1]);
+  return raw.map((v, i) => v * Math.exp(k * i / (n - 1)));
+}
+
+/* ================= sample data ================= */
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const STRAT_MONTHLY = {
+  2024: [2.1, -1.4, 3.6, 0.8, -2.9, 6.1, 1.5, -0.6, 2.7, 4.0, -1.8, 2.4],
+  2025: [1.9, -3.4, 0.6, 6.4, 2.2, -1.1, 4.1, 0.4, -2.2, 2.9, 1.6, 1.0],
+};
+const BENCH_MONTHLY = {
+  2024: [1.4, -2.6, 4.1, -1.9, 3.8, 5.2, -0.8, 2.3, 1.1, -2.7, 3.4, 1.9],
+  2025: [-1.2, -4.1, 2.8, 5.5, 1.6, -2.4, 2.9, 1.2, -3.1, 3.6, 0.9, 1.3],
+};
+
+function equityFromMonthly(monthly, start, seed, ppm = 21) {
+  const r = rng(seed); const out = [start]; let a = start;
+  const all = [...monthly[2024], ...monthly[2025]];
+  for (const m of all) {
+    const b = a * (1 + m / 100);
+    const walk = [0];
+    for (let j = 1; j <= ppm; j++) walk.push(walk[j - 1] + (r() - 0.5));
+    for (let j = 1; j <= ppm; j++) {
+      const t = j / ppm;
+      const base = a * Math.pow(b / a, t);
+      const bridge = walk[j] - t * walk[ppm];
+      out.push(base * (1 + bridge * 0.012));
+    }
+    a = b;
+  }
+  return out;
+}
+
+const RESULT = (() => {
+  const equity = equityFromMonthly(STRAT_MONTHLY, 10000, 7);
+  const bench = equityFromMonthly(BENCH_MONTHLY, 10000, 19);
+  let peak = equity[0], maxDD = 0;
+  for (const v of equity) { peak = Math.max(peak, v); maxDD = Math.min(maxDD, (v - peak) / peak); }
+  const all = [...STRAT_MONTHLY[2024], ...STRAT_MONTHLY[2025]].map(x => x / 100);
+  const mean = all.reduce((s, x) => s + x, 0) / all.length;
+  const sd = Math.sqrt(all.reduce((s, x) => s + (x - mean) ** 2, 0) / all.length);
+  const dd = Math.sqrt(all.reduce((s, x) => s + Math.min(x, 0) ** 2, 0) / all.length);
+  const r = rng(42); const trades = [];
+  let day = new Date(Date.UTC(2024, 0, 3));
+  for (let i = 0; i < 48; i++) {
+    const win = r() < 0.6;
+    const entry = 182 + i * 0.9 + (r() - 0.5) * 14;
+    const qty = Math.round(42 + r() * 18);
+    const pnl = win ? 60 + r() * 380 : -(45 + r() * 230);
+    const exit = entry + pnl / qty;
+    const entryDate = new Date(day);
+    const hold = 3 + Math.floor(r() * 9);
+    day = new Date(day.getTime() + (hold + 2 + Math.floor(r() * 6)) * 86400000);
+    const exitDate = new Date(entryDate.getTime() + hold * 86400000);
+    trades.push({ n: i + 1, entryDate, exitDate, entry, exit, qty, pnl, pct: (exit - entry) / entry * 100 });
+  }
+  const wins = trades.filter(t => t.pnl > 0).length;
+  const final = equity[equity.length - 1];
+  const benchFinal = bench[bench.length - 1];
+  return {
+    equity, bench, final,
+    totalReturn: (final / 10000 - 1) * 100,
+    benchReturn: (benchFinal / 10000 - 1) * 100,
+    maxDD: maxDD * 100,
+    sharpe: mean / sd * Math.sqrt(12),
+    sortino: mean / dd * Math.sqrt(12),
+    trades, winRate: wins / trades.length * 100,
+    losingMonths: all.filter(x => x < 0).length,
+  };
+})();
+
+const WATCH = [
+  { sym: "AAPL", name: "Apple Inc.", price: 226.10, chg: 1.24, seed: 3 },
+  { sym: "MSFT", name: "Microsoft", price: 418.92, chg: -0.38, seed: 5 },
+  { sym: "GOOGL", name: "Alphabet", price: 167.45, chg: 0.82, seed: 8 },
+  { sym: "BTC/USD", name: "Bitcoin", price: 64850.00, chg: 2.15, seed: 11 },
+  { sym: "ETH/USD", name: "Ethereum", price: 3135.56, chg: 1.65, seed: 13 },
+  { sym: "TSLA", name: "Tesla", price: 248.30, chg: -1.92, seed: 17 },
+];
+const fmtPrice = (p) => p >= 1000 ? fmtMoney(p) : fmtMoney(p);
+WATCH.forEach(w => { w.series = walkTo(40, w.price / (1 + w.chg / 100), w.price, 0.012, w.seed); });
+
+let STRATEGIES = [
+  { id: 1, name: "MA Crossover", asset: "AAPL", tf: "1h", status: "active", version: 3, updated: "2 hours ago", desc: "Buy when fast SMA crosses above slow SMA, sell on cross below." },
+  { id: 2, name: "RSI Overbought/Oversold", asset: "BTC/USD", tf: "1h", status: "active", version: 5, updated: "Yesterday", desc: "Buy when RSI drops below 30 (oversold), sell when it rises above 70." },
+  { id: 3, name: "Bollinger Band Bounce", asset: "AAPL", tf: "1h", status: "active", version: 1, updated: "Just now", desc: "Buy at the lower band (mean reversion), sell at the upper band." },
+  { id: 4, name: "MACD Signal Cross", asset: "ETH/USD", tf: "4h", status: "paused", version: 2, updated: "4 days ago", desc: "Buy when the MACD line crosses above the signal line, sell on cross below." },
+  { id: 5, name: "MA Crossover", asset: "MSFT", tf: "1D", status: "paused", version: 4, updated: "1 week ago", desc: "Cloned from the AAPL crossover, retuned for daily candles." },
+  { id: 6, name: "RSI Overbought/Oversold", asset: "GOOGL", tf: "15m", status: "archived", version: 1, updated: "3 weeks ago", desc: "Buy when RSI drops below 30 (oversold), sell when it rises above 70." },
+];
+let nextId = 7;
+
+const TEMPLATES = [
+  { id: "blank", name: "Blank strategy", desc: "Start from an empty onCandle function.", tags: [], code:
+`// Runs once per candle. ctx only sees candles up to now.
+function onCandle(ctx) {
+  // ctx.buy() / ctx.sell() place orders at the next candle's open
+}` },
+  { id: "ma", name: "MA Crossover", desc: "Buy when fast SMA crosses above slow SMA, sell on cross below.", tags: ["trend", "beginner"], code:
+`// MA Crossover: trade the 10/20 SMA cross
+function onCandle(ctx) {
+  const fast = ctx.sma(10);
+  const slow = ctx.sma(20);
+
+  if (fast > slow && !ctx.position) {
+    ctx.buy();
+  }
+
+  if (fast < slow && ctx.position) {
+    ctx.sell();
+  }
+}` },
+  { id: "rsi", name: "RSI Overbought/Oversold", desc: "Buy when RSI drops below 30, sell when it rises above 70.", tags: ["oscillator", "beginner"], code:
+`// RSI: buy oversold, sell overbought
+function onCandle(ctx) {
+  const rsi = ctx.rsi(14);
+
+  if (rsi < 30 && !ctx.position) ctx.buy();
+  if (rsi > 70 && ctx.position) ctx.sell();
+}` },
+  { id: "macd", name: "MACD Signal Cross", desc: "Buy when MACD crosses above its signal line, sell on cross below.", tags: ["trend", "intermediate"], code:
+`// MACD: follow the signal-line cross
+function onCandle(ctx) {
+  const { macd, signal } = ctx.macd(12, 26, 9);
+
+  if (macd > signal && !ctx.position) ctx.buy();
+  if (macd < signal && ctx.position) ctx.sell();
+}` },
+  { id: "bb", name: "Bollinger Band Bounce", desc: "Buy at the lower band (mean reversion), sell at the upper band.", tags: ["mean-reversion", "intermediate"], code:
+`// Bollinger: fade moves to the outer bands
+function onCandle(ctx) {
+  const { upper, lower } = ctx.bollinger(20, 2);
+  const price = ctx.candle.close;
+
+  if (price <= lower && !ctx.position) ctx.buy();
+  if (price >= upper && ctx.position) ctx.sell();
+}` },
+];
+
+let VERSIONS = [
+  { v: 3, when: "2 hours ago", note: "Changed slow SMA from 30 to 20" },
+  { v: 2, when: "4 days ago", note: "Added position check before selling" },
+  { v: 1, when: "1 week ago", note: "Created from the MA Crossover template" },
+];
+let currentVersion = 3;
+
+let ALERTS = [
+  { id: 1, sym: "BTC/USD", cond: "above", price: 65000 },
+  { id: 2, sym: "AAPL", cond: "below", price: 215 },
+];
+let nextAlertId = 3;
+
+let NOTIFS = [
+  { id: 1, color: "var(--success)", title: "Backtest complete", body: `MA Crossover on AAPL returned ${fmtPct(RESULT.totalReturn)}`, when: "2 min ago", read: false, go: "backtests/result" },
+  { id: 2, color: "var(--brand)", title: "AI analysis ready", body: "Risk score 6/10 for MA Crossover", when: "1 min ago", read: false, go: "backtests/result" },
+  { id: 3, color: "var(--warning)", title: "Price alert", body: "BTC/USD crossed above $64,500", when: "38 min ago", read: false, go: "market" },
+  { id: 4, color: "var(--danger)", title: "Drawdown alert", body: "Main portfolio fell 3.1% yesterday", when: "Yesterday", read: true, go: "portfolio" },
+];
+
+const BACKTESTS = [
+  { id: "bt-1042", strat: "MA Crossover", v: 3, asset: "AAPL", tf: "1h", range: "Jan 2024 – Dec 2025", status: "completed", ret: RESULT.totalReturn, sharpe: RESULT.sharpe, trades: 48, when: "2 min ago" },
+  { id: "bt-1041", strat: "Bollinger Band Bounce", v: 1, asset: "AAPL", tf: "1h", range: "Jan 2024 – Dec 2025", status: "running", progress: 64, when: "Just now" },
+  { id: "bt-1040", strat: "MACD Signal Cross", v: 2, asset: "ETH/USD", tf: "4h", range: "Jan 2023 – Dec 2025", status: "failed", error: "Strategy exceeded the 30 s CPU limit", when: "1 hour ago" },
+  { id: "bt-1039", strat: "RSI Overbought/Oversold", v: 5, asset: "BTC/USD", tf: "1h", range: "Jan 2024 – Dec 2025", status: "completed", ret: 18.40, sharpe: 0.96, trades: 73, when: "Yesterday" },
+  { id: "bt-1038", strat: "MA Crossover", v: 4, asset: "MSFT", tf: "1D", range: "Jan 2020 – Dec 2025", status: "completed", ret: -4.10, sharpe: -0.21, trades: 22, when: "3 days ago" },
+  { id: "bt-1037", strat: "RSI Overbought/Oversold", v: 4, asset: "BTC/USD", tf: "1h", range: "Jan 2024 – Dec 2025", status: "completed", ret: 11.75, sharpe: 0.71, trades: 81, when: "4 days ago" },
+];
+
+const POSITIONS = [
+  { sym: "AAPL", qty: 15, entry: 218.40, price: 226.10, strat: "MA Crossover" },
+  { sym: "BTC/USD", qty: 0.05, entry: 61200.00, price: 64850.00, strat: "RSI Overbought/Oversold" },
+  { sym: "ETH/USD", qty: 0.8, entry: 3050.00, price: 3135.56, strat: "MACD Signal Cross" },
+];
+POSITIONS.forEach(p => { p.value = p.qty * p.price; p.pnl = (p.price - p.entry) * p.qty; p.pct = (p.price - p.entry) / p.entry * 100; });
+const PORT = (() => {
+  const unreal = POSITIONS.reduce((s, p) => s + p.pnl, 0);
+  const realized = 879.85;
+  const value = 10000 + unreal + realized;
+  const invested = POSITIONS.reduce((s, p) => s + p.value, 0);
+  return { start: 10000, unreal, realized, value, cash: value - invested, today: 1.21,
+    series: walkTo(31, 10380, value, 0.018, 23), bench: walkTo(31, 10000, 10612, 0.012, 29) };
+})();
+let PORT_STRATS = [
+  { name: "MA Crossover", v: 3, asset: "AAPL", tf: "1h", on: true, pnl: 412.30 },
+  { name: "RSI Overbought/Oversold", v: 5, asset: "BTC/USD", tf: "1h", on: true, pnl: 586.12 },
+  { name: "MACD Signal Cross", v: 2, asset: "ETH/USD", tf: "4h", on: false, pnl: 247.88 },
+];
+const TXNS = [
+  { when: "Today 14:32", sym: "AAPL", side: "Buy", qty: 15, price: 218.40, strat: "MA Crossover" },
+  { when: "Today 09:05", sym: "ETH/USD", side: "Buy", qty: 0.8, price: 3050.00, strat: "MACD Signal Cross" },
+  { when: "Yesterday 21:10", sym: "BTC/USD", side: "Buy", qty: 0.05, price: 61200.00, strat: "RSI Overbought/Oversold" },
+  { when: "Yesterday 16:48", sym: "AAPL", side: "Sell", qty: 14, price: 223.85, strat: "MA Crossover" },
+  { when: "Oct 7 15:20", sym: "AAPL", side: "Buy", qty: 14, price: 209.60, strat: "MA Crossover" },
+  { when: "Oct 6 08:14", sym: "BTC/USD", side: "Sell", qty: 0.06, price: 62940.00, strat: "RSI Overbought/Oversold" },
+];
+
+const COMMUNITY = [
+  { name: "Golden Cross Swing", author: "quantlee", asset: "SPY", tf: "1D", desc: "50/200 SMA cross with an ATR trailing stop. Few trades, long holds.", clones: 214, ret: 41.2, sharpe: 1.18, tags: ["trend"] },
+  { name: "RSI Divergence Hunter", author: "mr_meanrev", asset: "BTC/USD", tf: "4h", desc: "Enters when price makes a lower low but RSI makes a higher low.", clones: 167, ret: 27.9, sharpe: 0.94, tags: ["oscillator"] },
+  { name: "Bollinger Squeeze Breakout", author: "satoshi_swing", asset: "ETH/USD", tf: "1h", desc: "Waits for the bands to narrow, then trades the breakout direction.", clones: 132, ret: 33.4, sharpe: 1.05, tags: ["volatility"] },
+  { name: "Triple EMA Ribbon", author: "ribbonrider", asset: "NVDA", tf: "1h", desc: "Long only while EMA 8 > 21 > 55. Exits on the first ribbon flip.", clones: 98, ret: 52.6, sharpe: 1.31, tags: ["trend"] },
+  { name: "Mean Reversion Intraday", author: "mr_meanrev", asset: "QQQ", tf: "15m", desc: "Fades 2-sigma moves from the session VWAP; flat by the close.", clones: 76, ret: 14.3, sharpe: 1.42, tags: ["mean-reversion"] },
+  { name: "MACD + Volume Filter", author: "volume_vic", asset: "MSFT", tf: "4h", desc: "MACD crosses only count when volume beats its 20-bar average.", clones: 54, ret: 19.8, sharpe: 0.88, tags: ["trend"] },
+];
+
+let API_KEYS = [
+  { id: 1, name: "Jupyter notebook", created: "Sep 12, 2026", used: "Today" },
+  { id: 2, name: "Discord bot", created: "Aug 3, 2026", used: "3 weeks ago" },
+];
+let nextKeyId = 3;
+
+/* ================= charts ================= */
+function spark(values, color) {
+  const min = Math.min(...values), max = Math.max(...values), n = values.length;
+  const pts = values.map((v, i) => [i / (n - 1) * 100, 30 - ((v - min) / (max - min || 1)) * 26 - 2]);
+  const line = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(2) + " " + p[1].toFixed(2)).join(" ");
+  return `<svg class="spark" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true">
+    <path d="${line} L100 32 L0 32 Z" style="fill:${color};fill-opacity:.12"/>
+    <path d="${line}" style="fill:none;stroke:${color};stroke-width:1.6" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+let CHARTS = {}, chartSeq = 0;
+const DAY = 86400000;
+const fmtDay = (t) => new Date(t).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+const X_PORT = (i) => fmtDay(Date.UTC(2026, 8, 10) + i * DAY);
+const X_BT = (i) => fmtDay(Date.UTC(2024, 0, 1) + Math.round(i * 730 / 504) * DAY);
+
+function lineChart({ series, w = 800, h = 280, fmt = (v) => fmtMoney(v, 0), xLabels = [], xFmt = (i) => `Point ${i + 1}` }) {
+  const padL = 10, padR = 70, padT = 14, padB = 26;
+  const all = series.flatMap(s => s.values);
+  let min = Math.min(...all), max = Math.max(...all); const span = max - min; min -= span * 0.06; max += span * 0.06;
+  const n = series[0].values.length;
+  const x = (i) => padL + i / (n - 1) * (w - padL - padR);
+  const y = (v) => padT + (max - v) / (max - min) * (h - padT - padB);
+  const id = "c" + chartSeq++;
+  CHARTS[id] = { kind: "line", series, n, w, x, y, xFmt, index: (vx) => Math.round((vx - padL) / (w - padL - padR) * (n - 1)) };
+  const summary = series.map(s => `${s.label} from ${fmtMoney(s.values[0], 0)} to ${fmtMoney(s.values[n - 1], 0)}`).join("; ");
+  let out = `<div class="chart-wrap" data-chart="${id}" tabindex="0" role="group" aria-label="Chart. Use the left and right arrow keys to read values."><svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(summary)}">`;
+  for (let g = 0; g <= 4; g++) {
+    const v = min + (max - min) * g / 4, yy = y(v);
+    out += `<line x1="${padL}" x2="${w - padR}" y1="${yy}" y2="${yy}" style="stroke:var(--border);stroke-dasharray:3 4"/>`;
+    out += `<text x="${w - padR + 8}" y="${yy + 4}">${fmt(v)}</text>`;
+  }
+  xLabels.forEach(({ i, label }) => { out += `<text x="${x(i)}" y="${h - 6}" text-anchor="${i === 0 ? "start" : i === n - 1 ? "end" : "middle"}">${label}</text>`; });
+  series.slice().reverse().forEach((s, idx) => {
+    const primary = idx === series.length - 1;
+    const d = s.values.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1)).join(" ");
+    if (primary) out += `<path d="${d} L${x(n - 1)} ${h - padB} L${x(0)} ${h - padB} Z" style="fill:${s.color};fill-opacity:.1"/>`;
+    out += `<path d="${d}" style="fill:none;stroke:${s.color};stroke-width:${primary ? 2 : 1.5};${s.dashed ? "stroke-dasharray:5 4;" : ""}stroke-linejoin:round"/>`;
+  });
+  const last = series[0].values[n - 1];
+  out += `<circle cx="${x(n - 1)}" cy="${y(last)}" r="4" style="fill:${series[0].color};stroke:var(--card);stroke-width:2"/>`;
+  out += `<line class="xh" x1="0" x2="0" y1="${padT}" y2="${h - padB}" style="stroke:var(--muted-foreground);stroke-dasharray:2 3;visibility:hidden"/>`;
+  series.forEach(s => { out += `<circle class="xd" r="4" style="fill:${s.color};stroke:var(--card);stroke-width:2;visibility:hidden"/>`; });
+  return out + `</svg><div class="tip" hidden></div></div>`;
+}
+
+function candleChart(price, seed) {
+  const r = rng(seed); const n = 64; let p = price * 0.92; const data = [];
+  for (let i = 0; i < n; i++) {
+    const o = p, c = o * (1 + (r() - 0.46) * 0.028);
+    data.push({ o, c, h: Math.max(o, c) * (1 + r() * 0.009), l: Math.min(o, c) * (1 - r() * 0.009), v: 0.3 + r() * 0.7 });
+    p = c;
+  }
+  const k = price / data[n - 1].c; data.forEach(d => { d.o *= k; d.c *= k; d.h *= k; d.l *= k; });
+  const W = 820, H = 380, padR = 76, volH = 60, padT = 12, plotB = H - volH - 30;
+  let min = Math.min(...data.map(d => d.l)), max = Math.max(...data.map(d => d.h));
+  const y = (v) => padT + (max - v) / (max - min) * (plotB - padT);
+  const cw = (W - padR - 10) / n;
+  const id = "c" + chartSeq++;
+  const row = (d) => `O ${d.o.toFixed(2)} · H ${d.h.toFixed(2)} · L ${d.l.toFixed(2)} · C ${d.c.toFixed(2)} · Vol ${(d.v * 62).toFixed(1)}M`;
+  CHARTS[id] = { kind: "candle", data, n, w: W, row, x: (i) => 5 + i * cw + cw / 2, index: (vx) => Math.floor((vx - 5) / cw) };
+  let s = `<div class="chart-wrap" data-chart="${id}" tabindex="0" role="group" aria-label="Candlestick chart. Use the left and right arrow keys to read each candle."><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${n} candles, last close ${price.toFixed(2)}, low ${min.toFixed(2)}, high ${max.toFixed(2)}">`;
+  for (let g = 0; g <= 4; g++) {
+    const v = min + (max - min) * g / 4, yy = y(v);
+    s += `<line x1="0" x2="${W - padR}" y1="${yy}" y2="${yy}" style="stroke:var(--border);stroke-dasharray:3 4"/><text x="${W - padR + 8}" y="${yy + 4}">${v.toFixed(2)}</text>`;
+  }
+  data.forEach((d, i) => {
+    const cx = 5 + i * cw + cw / 2, up = d.c >= d.o, col = up ? "var(--success)" : "var(--danger)";
+    s += `<line x1="${cx}" x2="${cx}" y1="${y(d.h)}" y2="${y(d.l)}" style="stroke:${col};stroke-width:1"/>`;
+    const top = y(Math.max(d.o, d.c)), bh = Math.max(1, Math.abs(y(d.o) - y(d.c)));
+    s += `<rect x="${cx - cw * 0.32}" y="${top}" width="${cw * 0.64}" height="${bh}" rx="1" style="fill:${col}"/>`;
+    const vh = d.v * (volH - 8);
+    s += `<rect x="${cx - cw * 0.32}" y="${H - 22 - vh}" width="${cw * 0.64}" height="${vh}" style="fill:${col};fill-opacity:.35"/>`;
+  });
+  const ly = y(price);
+  s += `<line x1="0" x2="${W - padR}" y1="${ly}" y2="${ly}" style="stroke:var(--brand);stroke-dasharray:4 3"/>`;
+  s += `<rect x="${W - padR + 2}" y="${ly - 10}" width="${padR - 4}" height="20" rx="4" style="fill:var(--brand)"/><text x="${W - padR + 8}" y="${ly + 4}" style="fill:#fff;font-weight:700">${price.toFixed(2)}</text>`;
+  ["09:30", "11:00", "12:30", "14:00", "15:30"].forEach((t, i) => { s += `<text x="${10 + i * (W - padR - 20) / 4}" y="${H - 4}">${t}</text>`; });
+  s += `<line class="xh" x1="0" x2="0" y1="${padT}" y2="${H - 22}" style="stroke:var(--muted-foreground);stroke-dasharray:2 3;visibility:hidden"/>`;
+  return { html: s + "</svg></div>", row: row(data[n - 1]) };
+}
+
+function bindCharts() {
+  document.querySelectorAll(".chart-wrap").forEach((wrap) => {
+    const c = CHARTS[wrap.dataset.chart]; if (!c) return;
+    const svg = wrap.querySelector("svg"), tip = wrap.querySelector(".tip"), xh = svg.querySelector(".xh");
+    let idx = c.n - 1;
+    const show = (i) => {
+      idx = Math.max(0, Math.min(c.n - 1, i));
+      const xv = c.x(idx);
+      xh.setAttribute("x1", xv); xh.setAttribute("x2", xv); xh.style.visibility = "visible";
+      if (c.kind === "candle") { const o = document.getElementById("ohlc"); if (o) o.textContent = c.row(c.data[idx]); return; }
+      svg.querySelectorAll(".xd").forEach((dot, k) => { dot.setAttribute("cx", xv); dot.setAttribute("cy", c.y(c.series[k].values[idx])); dot.style.visibility = "visible"; });
+      tip.innerHTML = `<b>${c.xFmt(idx)}</b>` + c.series.map(s => `<span><i style="background:${s.color}"></i>${esc(s.label)}<em>${fmtMoney(s.values[idx])}</em></span>`).join("");
+      tip.hidden = false;
+      const w = svg.getBoundingClientRect().width, px = xv / c.w * w;
+      tip.style.left = (px > w * 0.6 ? px - tip.offsetWidth - 14 : px + 14) + "px";
+    };
+    const hide = () => {
+      xh.style.visibility = "hidden";
+      svg.querySelectorAll(".xd").forEach(d => { d.style.visibility = "hidden"; });
+      if (tip) tip.hidden = true;
+      if (c.kind === "candle") { const o = document.getElementById("ohlc"); if (o) o.textContent = c.row(c.data[c.n - 1]); }
+    };
+    const step = Math.max(1, Math.round(c.n / 60));
+    wrap.addEventListener("pointermove", (ev) => { const r = svg.getBoundingClientRect(); show(c.index((ev.clientX - r.left) / r.width * c.w)); });
+    wrap.addEventListener("pointerleave", hide);
+    wrap.addEventListener("focus", () => show(idx));
+    wrap.addEventListener("blur", hide);
+    wrap.addEventListener("keydown", (ev) => {
+      if (ev.key === "ArrowLeft") { ev.preventDefault(); show(idx - step); }
+      if (ev.key === "ArrowRight") { ev.preventDefault(); show(idx + step); }
+      if (ev.key === "Home") { ev.preventDefault(); show(0); }
+      if (ev.key === "End") { ev.preventDefault(); show(c.n - 1); }
+    });
+  });
+}
+
+function highlight(code) {
+  return code.split("\n").map((line, i) => {
+    let html = esc(line);
+    const ci = html.indexOf("//");
+    let comment = "";
+    if (ci >= 0) { comment = `<span class="t-com">${html.slice(ci)}</span>`; html = html.slice(0, ci); }
+    html = html.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="t-num">$1</span>')
+               .replace(/\b(function|const|let|if|else|return)\b/g, '<span class="t-kw">$1</span>')
+               .replace(/ctx\.(\w+)/g, 'ctx.<span class="t-fn">$1</span>');
+    return `<span class="ln">${i + 1}</span>${html}${comment}`;
+  }).join("\n");
+}
+
+/* ================= shell ================= */
+const SCREENS = [
+  ["home", "Landing page"], ["login", "Log in"], ["register", "Create account"],
+  ["dashboard", "Dashboard"], ["market", "Market"], ["strategies", "Strategies"],
+  ["strategies/new", "Create strategy"], ["strategies/edit", "Edit strategy + versions"],
+  ["backtests", "Backtests"], ["backtests/new", "New backtest"], ["backtests/result", "Backtest results + AI"],
+  ["portfolio", "Paper trading portfolio"], ["community", "Community strategies"], ["settings", "Settings"],
+];
+const NAV = [
+  ["dashboard", "Dashboard", "grid"], ["market", "Market", "candles"], ["strategies", "Strategies", "code"],
+  ["backtests", "Backtests", "flask"], ["portfolio", "Portfolio", "wallet"], ["community", "Community", "users"],
+];
+
+const go = (route) => { location.hash = "#/" + route; };
+let notifOpen = false, openMenu = null, revokeArm = null, mockState = "normal", tradePage = 0;
+let btSort = { key: null, dir: "desc" };
+
+const STATE_COPY = {
+  dashboard: { title: "Overview", icon: "grid", thing: "your overview", err: "The gateway didn't respond in time. Nothing was lost, and this usually clears in a few seconds.", empty: ["Nothing to show yet", "Create a strategy and run a backtest. Results and your paper-trading portfolio will appear here.", "New strategy", "strategies/new"] },
+  market: { title: "Market", icon: "candles", thing: "market data", err: "The market data provider is rate-limiting requests. Prices resume automatically.", empty: ["Your watchlist is empty", "Add symbols to follow live prices, open charts and set price alerts.", "Add symbol", null] },
+  strategies: { title: "Strategies", icon: "code", thing: "your strategies", err: "The backtest service didn't respond. Your strategies are safe.", empty: ["No strategies yet", "Start from one of four templates or a blank editor. Your code runs in a sandbox.", "New strategy", "strategies/new"] },
+  backtests: { title: "Backtests", icon: "flask", thing: "backtest history", err: "The backtest service didn't respond. Running jobs keep going in the background.", empty: ["No backtests yet", "Pick a strategy and a date range to run your first backtest.", "New backtest", "backtests/new"] },
+  portfolio: { title: "Portfolio", icon: "wallet", thing: "your portfolio", err: "The paper trading service didn't respond. Open positions are unaffected.", empty: ["No paper-trading portfolio yet", "Create a portfolio with $10,000 of virtual money, then assign a strategy to it.", "Create portfolio", null] },
+  community: { title: "Community strategies", icon: "users", thing: "community strategies", err: "Couldn't reach the server. Check your connection and try again.", empty: ["Nothing published yet", "When traders make a strategy public, it shows up here for you to clone.", null, null] },
+};
+
+function stateBody(route) {
+  const s = STATE_COPY[route];
+  if (!s || mockState === "normal") return null;
+  const head = `<div class="page-head"><div><h1>${s.title}</h1></div></div>`;
+  if (mockState === "loading") {
+    const sk = (w, h, extra = "") => `<div class="sk" style="width:${w};height:${h}px;${extra}"></div>`;
+    return `<div class="page-head"><div>${sk("180px", 22)}${sk("300px", 12, "margin-top:10px")}</div></div>
+      <div class="kpis">${Array.from({ length: 4 }, () => `<div class="kpi">${sk("45%", 11)}${sk("70%", 20, "margin-top:6px")}</div>`).join("")}</div>
+      <div class="cols-2"><div class="card card-pad">${sk("30%", 14)}${sk("100%", 220, "margin-top:16px")}</div>
+      <div class="card card-pad" style="display:flex;flex-direction:column;gap:16px">${Array.from({ length: 6 }, () => `<div style="display:flex;justify-content:space-between;gap:12px">${sk("40%", 12)}${sk("22%", 12)}</div>`).join("")}</div></div>`;
+  }
+  if (mockState === "empty") {
+    const [t, d, cta, to] = s.empty;
+    return `${head}<div class="card state"><span class="ic">${ic(s.icon)}</span><h2>${t}</h2><p>${d}</p>${cta ? `<div class="actions"><button class="btn btn-primary" ${to ? `data-go="${to}"` : `data-toast="${cta} opens here"`}>${ic("plus")} ${cta}</button></div>` : ""}</div>`;
+  }
+  return `${head}<div class="card state error" role="alert"><span class="ic">${ic("alert")}</span><h2>Couldn't load ${s.thing}</h2><p>${s.err}</p><div class="actions"><button class="btn btn-outline" data-retry>${ic("refresh")} Try again</button></div><code>Error reference 7f3a-21c9</code></div>`;
+}
+
+function shell(route, crumbs, body) {
+  const section = route.split("/")[0];
+  const unread = NOTIFS.filter(n => !n.read).length;
+  const counts = { strategies: STRATEGIES.filter(s => s.status !== "archived").length, backtests: BACKTESTS.length };
+  return `
+  <div class="app">
+    <aside class="sidebar">
+      <a class="logo" data-go="dashboard" tabindex="0"><span class="mark">${LOGO}</span><span class="lbl">TradeVision</span></a>
+      <nav class="nav" aria-label="Main">
+        ${NAV.map(([r, label, icon]) => `<a href="#/${r}" ${section === r ? 'aria-current="page"' : ""}>${ic(icon)}<span class="lbl">${label}</span>${counts[r] ? `<span class="count">${counts[r]}</span>` : ""}</a>`).join("")}
+        <a href="#/settings" ${section === "settings" ? 'aria-current="page"' : ""}>${ic("sliders")}<span class="lbl">Settings</span></a>
+      </nav>
+      <div class="side-foot">
+        <div class="user"><span class="avatar">KJ</span><div class="who"><b>Kavindu J.</b><span>Free plan</span></div></div>
+        <button class="btn btn-ghost btn-sm" data-go="home" style="justify-content:flex-start">${ic("logout")} Log out</button>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <div class="crumbs">${crumbs}</div>
+        <div class="gsearch">${ic("search")}<input placeholder="Search symbols, strategies…" aria-label="Search"><kbd>/</kbd></div>
+        <span class="spacer"></span>
+        <div style="position:relative">
+          <button class="icon-btn" id="bell" aria-label="Notifications" aria-expanded="${notifOpen}">${ic("bell")}${unread ? `<span class="badge-dot">${unread}</span>` : ""}</button>
+          ${notifOpen ? notifPanel() : ""}
+        </div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">${ic(isDark() ? "sun" : "moon")}</button>
+      </header>
+      ${tickerStrip(route)}
+      <main class="content" ${mockState === "loading" && STATE_COPY[route] ? 'aria-busy="true"' : ""}>${stateBody(route) ?? body}</main>
+    </div>
+  </div>`;
+}
+
+function notifPanel() {
+  return `<div class="notif-panel" role="dialog" aria-label="Notifications">
+    <div class="head">Notifications <button class="link" id="markRead" style="font-size:11px">Mark all as read</button></div>
+    ${NOTIFS.map(n => `<div class="notif ${n.read ? "read" : ""}" data-notif="${n.id}" style="cursor:pointer"><span class="dot" style="background:${n.color}"></span><div><b>${n.title}</b><span>${n.body} · ${n.when}</span></div></div>`).join("")}
+  </div>`;
+}
+
+function tickerStrip(route) {
+  const px = (p) => p.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const stale = mockState === "error" && route === "market";
+  return `<div class="ticker" aria-label="Watchlist prices" ${stale ? 'style="opacity:0.55"' : ""}>${WATCH.map(w => `<span><b>${w.sym}</b>${px(w.price)} <span class="${stale ? "muted" : cls(w.chg)}">${w.chg >= 0 ? "+" : ""}${w.chg.toFixed(2)}%</span></span>`).join("")}<span class="mkt">${stale ? "Prices paused · last update 14:31:52" : "NYSE open · closes 16:00 ET"}</span></div>`;
+}
+
+const crumb = (...parts) => parts.map((p, i) => i === parts.length - 1 ? `<b>${p}</b>` : `<span>${p}</span><span>/</span>`).join("");
+
+/* ================= views ================= */
+const V = {};
+
+V.home = () => `
+<div class="land">
+  <nav class="land-nav">
+    <a class="logo" data-go="home" tabindex="0"><span class="mark">${LOGO}</span>TradeVision</a>
+    <div class="links">
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">${ic(isDark() ? "sun" : "moon")}</button>
+      <button class="btn btn-ghost" data-go="login">Log in</button>
+      <button class="btn btn-primary" data-go="register">Create account</button>
+    </div>
+  </nav>
+  <section class="hero">
+    <h1>Backtest trading strategies in JavaScript.</h1>
+    <p class="lede">Write the logic, run it against years of market data, and see exactly where it makes and loses money. When it holds up, paper trade it on live prices.</p>
+    <div class="ctas">
+      <button class="btn btn-primary" data-go="register">Create account</button>
+      <button class="btn btn-outline" data-go="dashboard">Open the demo</button>
+      <span class="fine">Free. Simulated money only.</span>
+    </div>
+  </section>
+  <section class="shot" aria-label="Example backtest">
+    <div class="shot-head"><span>ma-crossover.js</span><span>AAPL · 1h · Jan 2024 – Dec 2025 · 48 trades · ran in 3.8 s</span></div>
+    <div class="shot-body">
+      <pre class="code">${highlight(TEMPLATES[1].code)}</pre>
+      <div>
+        <div class="kpis">
+          <div class="kpi"><span class="label">Return</span><span class="value up">${fmtPct(RESULT.totalReturn)}</span></div>
+          <div class="kpi"><span class="label">Buy &amp; hold</span><span class="value">${fmtPct(RESULT.benchReturn)}</span></div>
+          <div class="kpi"><span class="label">Max drawdown</span><span class="value down">${RESULT.maxDD.toFixed(2)}%</span></div>
+          <div class="kpi"><span class="label">Sharpe</span><span class="value">${RESULT.sharpe.toFixed(2)}</span></div>
+        </div>
+        <div class="chart-pad">${lineChart({ series: [{ values: RESULT.equity, color: "var(--foreground)", label: "Strategy" }, { values: RESULT.bench, color: "var(--muted-foreground)", dashed: true, label: "Buy & hold" }], h: 250, xFmt: X_BT, xLabels: [{ i: 0, label: "Jan 24" }, { i: 252, label: "Jan 25" }, { i: RESULT.equity.length - 1, label: "Dec 25" }] })}</div>
+      </div>
+    </div>
+  </section>
+  <section class="spec">
+    <h2>What's in it</h2>
+    <dl>
+      <dt>Strategy editor</dt><dd>Monaco, with type hints for every indicator. Start from a blank file or one of four templates; every save is a version you can restore.</dd>
+      <dt>Backtesting</dt><dd>Candle-by-candle simulation with slippage, commission and next-candle fills, measured against buy-and-hold. One year of 1-minute data runs in under 10 seconds.</dd>
+      <dt>Sandbox</dt><dd>Your code runs in an isolated V8 instance with memory and CPU limits. It can't reach the network, the filesystem or the server.</dd>
+      <dt>AI analysis</dt><dd>Each finished backtest gets a written review: which months made money, which lost it, and what to try next.</dd>
+      <dt>Paper trading</dt><dd>Run strategies against live prices with a virtual $10,000 account, with position and daily-loss limits.</dd>
+      <dt>Alerts</dt><dd>Price crosses, portfolio drawdowns and finished backtests, in the app or by email.</dd>
+    </dl>
+  </section>
+  <footer class="land-foot">
+    <span>© 2026 TradeVision</span>
+    <span>TradeVision is a simulator. Nothing here is financial advice, and no real money is ever traded.</span>
+  </footer>
+</div>`;
+
+const oauthBtns = `
+  <button class="btn btn-outline btn-block" data-toast="Redirecting to Google…"><b style="font-size:13px">G</b> Continue with Google</button>
+  <button class="btn btn-outline btn-block" data-toast="Redirecting to GitHub…">${ic("code")} Continue with GitHub</button>`;
+
+V.login = () => `
+<div class="auth">
+  <form class="card auth-card" id="authForm" data-next="dashboard">
+    <a class="logo" data-go="home" tabindex="0"><span class="mark">${LOGO}</span>TradeVision</a>
+    <h1>Log in</h1>
+    <p class="sub">Welcome back. Your strategies are where you left them.</p>
+    <div class="field"><label for="le">Email</label><input class="input" id="le" type="email" value="kavindu@example.com" autocomplete="email"></div>
+    <div class="field"><label for="lp" style="display:flex;justify-content:space-between">Password <button type="button" class="link" data-toast="Reset link sent to kavindu@example.com" style="font-size:11px">Forgot password?</button></label><input class="input" id="lp" type="password" value="••••••••••" autocomplete="current-password"></div>
+    <button class="btn btn-primary btn-block" type="submit">Log in</button>
+    <div class="divider">or</div>
+    ${oauthBtns}
+    <p class="auth-alt">No account? <button type="button" class="link" data-go="register">Create one</button></p>
+  </form>
+</div>`;
+
+V.register = () => `
+<div class="auth">
+  <form class="card auth-card" id="authForm" data-next="dashboard" data-toast="Verification email sent to kavindu@example.com">
+    <a class="logo" data-go="home" tabindex="0"><span class="mark">${LOGO}</span>TradeVision</a>
+    <h1>Create your account</h1>
+    <p class="sub">Free. No card, no real money.</p>
+    <div class="field"><label for="rn">Full name</label><input class="input" id="rn" value="Kavindu Jayakody" autocomplete="name"></div>
+    <div class="field"><label for="re">Email</label><input class="input" id="re" type="email" value="kavindu@example.com" autocomplete="email"></div>
+    <div class="field"><label for="rp">Password</label><input class="input" id="rp" type="password" value="••••••••••" autocomplete="new-password"><p class="hint">At least 8 characters. We'll email you a link to verify your address.</p></div>
+    <button class="btn btn-primary btn-block" type="submit">Create account</button>
+    <div class="divider">or</div>
+    ${oauthBtns}
+    <p class="auth-alt">Already have an account? <button type="button" class="link" data-go="login">Log in</button></p>
+  </form>
+</div>`;
+
+V.dashboard = () => {
+  const bt = BACKTESTS.slice(0, 4);
+  return shell("dashboard", crumb("Dashboard"), `
+  <div class="page-head">
+    <div><h1>Overview</h1><p>Main portfolio · paper trading since Sep 10 · updated 14:32:08</p></div>
+    <div class="actions"><button class="btn btn-outline" data-go="backtests/new">${ic("play")} Run backtest</button><button class="btn btn-primary" data-go="strategies/new">${ic("plus")} New strategy</button></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><span class="label">Portfolio value</span><span class="value">${fmtMoney(PORT.value)}</span><span class="delta up">${fmtPct((PORT.value / PORT.start - 1) * 100)} all time</span>${spark(PORT.series, "var(--foreground)")}</div>
+    <div class="kpi"><span class="label">Today's P&amp;L</span><span class="value up">${fmtSigned(PORT.value * PORT.today / 100)}</span><span class="delta up">${fmtPct(PORT.today)}</span>${spark(walkTo(24, 100, 101.2, 0.01, 31), "var(--success)")}</div>
+    <div class="kpi"><span class="label">Active strategies</span><span class="value">${STRATEGIES.filter(s => s.status === "active").length}</span><span class="delta muted">${PORT_STRATS.filter(s => s.on).length} paper trading live</span></div>
+    <div class="kpi"><span class="label">Best Sharpe (30 days)</span><span class="value">${RESULT.sharpe.toFixed(2)}</span><span class="delta muted">MA Crossover · AAPL</span></div>
+  </div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Portfolio value</h3><div class="sub">Main portfolio · last 30 days</div></div>
+          <div class="legend"><span><i style="background:var(--foreground)"></i>Portfolio</span><span><i style="background:var(--muted-foreground)"></i>SPY buy &amp; hold</span></div></div>
+        <div class="card-body">${lineChart({ series: [{ values: PORT.series, color: "var(--foreground)", label: "Portfolio" }, { values: PORT.bench, color: "var(--muted-foreground)", dashed: true, label: "SPY" }], h: 240, xFmt: X_PORT, xLabels: [{ i: 0, label: "Sep 10" }, { i: 15, label: "Sep 25" }, { i: 30, label: "Oct 10" }] })}</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Recent backtests</h3></div><button class="link" data-go="backtests" style="font-size:12px">View all</button></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Strategy</th><th>Asset</th><th>Status</th><th class="r">Return</th><th class="r">Sharpe</th></tr></thead>
+          <tbody>${bt.map(b => btRow(b, true)).join("")}</tbody>
+        </table></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Watchlist</h3></div><button class="link" data-go="market" style="font-size:12px">Open market</button></div>
+        ${WATCH.map(w => `<div class="wl-row" data-go="market" tabindex="0"><div><b>${w.sym}</b><div class="sub">${w.name}</div></div>${spark(w.series, w.chg >= 0 ? "var(--success)" : "var(--danger)")}<div class="px"><div>${fmtPrice(w.price)}</div><div class="${cls(w.chg)}">${w.chg >= 0 ? "▲" : "▼"} ${Math.abs(w.chg).toFixed(2)}%</div></div></div>`).join("")}
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Running strategies</h3></div><button class="link" data-go="portfolio" style="font-size:12px">Portfolio</button></div>
+        ${PORT_STRATS.map(s => `<div class="set-row"><div><b>${s.name}</b><span>${s.asset} · ${s.tf} · v${s.v}</span></div><span class="status ${s.on ? "s-live" : "s-paused"}">${s.on ? "Live" : "Paused"}</span></div>`).join("")}
+      </div>
+    </div>
+  </div>`);
+};
+
+function btRow(b, compact) {
+  const status = b.status === "running"
+    ? `<span class="progress sm"><div style="width:${b.progress}%"></div></span><span class="status s-running">${b.progress}%</span>`
+    : `<span class="status s-${b.status}">${b.status}</span>`;
+  const ret = b.ret != null ? `<span class="${cls(b.ret)}">${fmtPct(b.ret)}</span>` : `<span class="muted">—</span>`;
+  const sh = b.sharpe != null ? b.sharpe.toFixed(2) : `<span class="muted">—</span>`;
+  const target = b.status === "completed" && b.id === "bt-1042" ? "backtests/result" : b.status === "completed" ? "backtests/result" : "";
+  if (compact) return `<tr class="${target ? "clickable" : ""}" ${target ? `data-go="${target}" tabindex="0"` : ""}><td><b>${b.strat}</b> <span class="muted">v${b.v}</span></td><td>${b.asset} · ${b.tf}</td><td>${b.status === "running" ? `<span class="status s-running">Running ${b.progress}%</span>` : status}</td><td class="r">${ret}</td><td class="r">${sh}</td></tr>`;
+  return `<tr class="${target ? "clickable" : ""}" ${target ? `data-go="${target}" tabindex="0"` : ""}>
+    <td><b>${b.strat}</b> <span class="muted">v${b.v}</span>${b.error ? `<div class="down" style="font-size:11px;margin-top:0.2rem;white-space:normal">${b.error}</div>` : ""}</td>
+    <td>${b.asset} · ${b.tf}</td><td class="muted">${b.range}</td><td>${status}</td>
+    <td class="r">${ret}</td><td class="r">${sh}</td><td class="r">${b.trades ?? '<span class="muted">—</span>'}</td><td class="r muted">${b.when}</td></tr>`;
+}
+
+let marketSym = "AAPL", marketTf = "1h";
+V.market = () => {
+  const w = WATCH.find(x => x.sym === marketSym);
+  const chart = candleChart(w.price, w.seed + marketTf.length * 7);
+  return shell("market", crumb("Market"), `
+  <div class="page-head">
+    <div><h1>Market</h1><p>Live prices stream every second during market hours. Crypto trades 24/7.</p></div>
+    <span class="status s-live">Live</span>
+  </div>
+  <div class="sym-tiles">
+    ${WATCH.map(x => `<button class="card sym" data-sym="${x.sym}" aria-pressed="${x.sym === marketSym}"><span class="t">${x.sym}</span><span class="p">${fmtPrice(x.price)}</span><span class="c ${cls(x.chg)}">${x.chg >= 0 ? "▲" : "▼"} ${Math.abs(x.chg).toFixed(2)}%</span></button>`).join("")}
+  </div>
+  <div class="cols-2">
+    <div class="card">
+      <div class="card-head">
+        <div><h3>${w.sym} <span class="muted" style="font-weight:400">· ${w.name}</span></h3><div class="sub num" id="ohlc">${chart.row}</div></div>
+        <div class="seg" role="group" aria-label="Timeframe">${["1m", "5m", "15m", "1h", "4h", "1D", "1W"].map(t => `<button data-tf="${t}" aria-pressed="${t === marketTf}">${t}</button>`).join("")}</div>
+      </div>
+      <div class="card-body">${chart.html}</div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Price alerts</h3><div class="sub">We'll notify you in-app when a price crosses your level.</div></div></div>
+        <form class="card-body" id="alertForm" style="display:flex;flex-direction:column;gap:0.7rem">
+          <div class="form-grid">
+            <div class="field"><label for="as">Symbol</label><select class="select" id="as">${WATCH.map(x => `<option ${x.sym === marketSym ? "selected" : ""}>${x.sym}</option>`).join("")}</select></div>
+            <div class="field"><label for="ac">When price is</label><select class="select" id="ac"><option value="above">Above</option><option value="below">Below</option></select></div>
+            <div class="field full"><label for="ap">Price</label><input class="input num" id="ap" type="number" step="0.01" value="${(w.price * 1.02).toFixed(2)}"></div>
+          </div>
+          <button class="btn btn-primary" type="submit">${ic("bell")} Create alert</button>
+        </form>
+        ${ALERTS.length ? ALERTS.map(a => `<div class="set-row"><div><b>${a.sym} ${a.cond} ${fmtPrice(a.price)}</b><span>Active</span></div><button class="icon-btn bare" data-del-alert="${a.id}" aria-label="Delete alert">${ic("trash")}</button></div>`).join("") : `<div class="card-body muted" style="font-size:12px">No alerts yet.</div>`}
+      </div>
+    </div>
+  </div>`);
+};
+
+let stratFilter = "all", stratQuery = "";
+V.strategies = () => {
+  const counts = { all: STRATEGIES.length, active: 0, paused: 0, archived: 0 };
+  STRATEGIES.forEach(s => counts[s.status]++);
+  const list = STRATEGIES.filter(s => (stratFilter === "all" || s.status === stratFilter) && (!stratQuery || (s.name + " " + s.asset).toLowerCase().includes(stratQuery.toLowerCase())));
+  return shell("strategies", crumb("Strategies"), `
+  <div class="page-head">
+    <div><h1>Strategies</h1><p>Design, test and manage your trading strategies.</p></div>
+    <div class="actions"><button class="btn btn-primary" data-go="strategies/new">${ic("plus")} New strategy</button></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><span class="label">Total</span><span class="value">${counts.all}</span></div>
+    <div class="kpi"><span class="label">Active</span><span class="value up">${counts.active}</span></div>
+    <div class="kpi"><span class="label">Paused</span><span class="value" style="color:var(--warning)">${counts.paused}</span></div>
+    <div class="kpi"><span class="label">Archived</span><span class="value muted">${counts.archived}</span></div>
+  </div>
+  <div class="toolbar">
+    <div class="search">${ic("search")}<input id="stratSearch" value="${esc(stratQuery)}" placeholder="Search by name or asset (e.g. RSI, BTC/USD)" aria-label="Search strategies"></div>
+    ${["all", "active", "paused", "archived"].map(f => `<button class="pill" data-filter="${f}" aria-pressed="${f === stratFilter}">${f[0].toUpperCase() + f.slice(1)}</button>`).join("")}
+  </div>
+  ${list.length ? `<div class="grid-cards">${list.map(s => `
+    <div class="card s-card">
+      <div class="s-top"><a class="s-name s-link" href="#/strategies/edit">${s.name}</a><span class="status s-${s.status}">${s.status}</span></div>
+      <div class="chips"><span class="chip">${s.asset}</span><span class="chip">${s.tf}</span></div>
+      <p class="s-desc">${s.desc}</p>
+      <div class="s-foot"><span class="num">v${s.version} · ${s.updated}</span>
+        <div class="acts">
+          ${s.status !== "archived" ? `<button class="btn btn-outline btn-sm" data-go="backtests/new">${ic("play")} Backtest</button>` : ""}
+          <div class="menu-anchor">
+            <button class="icon-btn bare" data-menu="${s.id}" aria-haspopup="menu" aria-expanded="${openMenu === s.id}" aria-label="More actions for ${s.name}">${ic("more")}</button>
+            ${openMenu === s.id ? `<div class="menu" role="menu">
+              <button role="menuitem" data-go="strategies/edit">${ic("edit")} Edit</button>
+              <button role="menuitem" data-clone="${s.id}">${ic("copy")} Duplicate</button>
+              ${s.status === "archived"
+                ? `<button role="menuitem" data-unarchive="${s.id}">${ic("history")} Restore</button>`
+                : `<button role="menuitem" data-toggle="${s.id}">${ic(s.status === "active" ? "pause" : "play")} ${s.status === "active" ? "Pause" : "Activate"}</button><hr><button role="menuitem" class="danger" data-archive="${s.id}">${ic("archive")} Archive</button>`}
+            </div>` : ""}
+          </div>
+        </div></div>
+    </div>`).join("")}</div>`
+  : `<div class="empty"><b>No strategies match</b>Try a different search, or clear the status filter.</div>`}`);
+};
+
+let tplSel = "ma";
+V["strategies/new"] = () => {
+  const t = TEMPLATES.find(x => x.id === tplSel);
+  return shell("strategies/new", crumb("Strategies", "New strategy"), `
+  <div><button class="back" data-go="strategies">${ic("back")} Strategies</button>
+  <div class="page-head"><div><h1>Create strategy</h1><p>Start from a template or a blank editor. Code runs in an isolated sandbox with a 30 s CPU limit.</p></div></div></div>
+  <div class="card">
+    <div class="card-head"><div><h3>Start from a template</h3><div class="sub">Picking one fills in the form and the editor.</div></div></div>
+    <div class="card-body"><div class="tpl-grid">${TEMPLATES.map(x => `<button class="card tpl" data-tpl="${x.id}" aria-pressed="${x.id === tplSel}"><b>${x.name}</b><p>${x.desc}</p>${x.tags.length ? `<div class="tags">${x.tags.map(g => `<span class="tag">${g}</span>`).join("")}</div>` : ""}</button>`).join("")}</div></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><h3>Details</h3></div></div>
+    <div class="card-body form-grid">
+      <div class="field full"><label for="sn">Strategy name</label><input class="input" id="sn" value="${t.id === "blank" ? "" : esc(t.name)}" placeholder="e.g. MA Crossover"></div>
+      <div class="field"><label for="sa">Asset symbol</label><input class="input" id="sa" value="AAPL"></div>
+      <div class="field"><label for="st">Timeframe</label><select class="select" id="st">${["1m", "5m", "15m", "1h", "4h", "1D", "1W"].map(x => `<option ${x === "1h" ? "selected" : ""}>${x}</option>`).join("")}</select></div>
+      <div class="field full"><label for="sd">Description</label><textarea class="textarea" id="sd" rows="2" placeholder="What does this strategy do?">${t.id === "blank" ? "" : esc(t.desc)}</textarea></div>
+    </div>
+  </div>
+  ${editorBlock(t.code, "strategy.js")}
+  <div class="form-actions">
+    <button class="btn btn-ghost" data-go="strategies">Cancel</button>
+    <button class="btn btn-outline" data-create="backtest">${ic("play")} Create &amp; backtest</button>
+    <button class="btn btn-primary" data-create>Create strategy</button>
+  </div>`);
+};
+
+function editorBlock(code, file) {
+  return `<div class="editor card">
+    <div class="editor-bar"><div class="dots"><i></i><i></i><i></i></div><span>${file}</span><span>JavaScript · Monaco</span></div>
+    <pre class="code">${highlight(code)}</pre>
+    <div class="hintbar">Available: <code>ctx.candle</code><code>ctx.history(n)</code><code>ctx.sma(p)</code><code>ctx.ema(p)</code><code>ctx.rsi(p)</code><code>ctx.macd(f,s,sig)</code><code>ctx.bollinger(p,k)</code><code>ctx.atr(p)</code><code>ctx.position</code><code>ctx.buy()</code><code>ctx.sell()</code></div>
+  </div>`;
+}
+
+V["strategies/edit"] = () => shell("strategies/edit", crumb("Strategies", "MA Crossover"), `
+  <div><button class="back" data-go="strategies">${ic("back")} Strategies</button>
+  <div class="page-head">
+    <div><h1>MA Crossover <span class="status s-active" style="vertical-align:middle">active</span></h1><p>AAPL · 1h · version ${currentVersion}. Saving creates a new version; older ones stay restorable.</p></div>
+    <div class="actions"><span class="dirty" id="dirtyNote" hidden>Unsaved changes</span><button class="btn btn-ghost" id="discardBtn" data-discard hidden>Discard</button><button class="btn btn-outline" data-go="backtests/new">${ic("play")} Run backtest</button><button class="btn btn-primary" id="saveBtn" data-save disabled>Save changes</button></div>
+  </div></div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="card">
+        <form class="card-body form-grid" id="editForm">
+          <div class="field full"><label for="en">Strategy name</label><input class="input" id="en" value="MA Crossover"></div>
+          <div class="field"><label for="ea">Asset symbol</label><input class="input" id="ea" value="AAPL"></div>
+          <div class="field"><label for="et">Timeframe</label><select class="select" id="et">${["15m", "1h", "4h", "1D"].map(x => `<option ${x === "1h" ? "selected" : ""}>${x}</option>`).join("")}</select></div>
+          <div class="field full"><label for="ed">Description</label><textarea class="textarea" id="ed" rows="2">Buy when fast SMA crosses above slow SMA, sell on cross below.</textarea></div>
+        </form>
+      </div>
+      ${editorBlock(TEMPLATES[1].code, `strategy.js · v${currentVersion}`)}
+    </div>
+    <div class="card">
+      <div class="card-head"><div><h3>Version history</h3><div class="sub">Restoring copies an old version forward as a new one.</div></div></div>
+      ${VERSIONS.map(v => `<div class="version ${v.v === currentVersion ? "current" : ""}">
+        <div class="row"><b class="num">v${v.v}</b>${v.v === currentVersion ? '<span class="cur">Current</span>' : `<button class="link" style="font-size:11.5px" data-restore="${v.v}">Restore</button>`}</div>
+        <span class="note">${v.note}</span><span class="note">${v.when}</span></div>`).join("")}
+    </div>
+  </div>`);
+
+const sortTh = (label, key, right) => {
+  const active = btSort.key === key;
+  return `<th class="${right ? "r" : ""}" ${active ? `aria-sort="${btSort.dir === "asc" ? "ascending" : "descending"}"` : ""}><button class="th-sort" data-sort="${key}">${label}<span class="arr" aria-hidden="true">${active ? (btSort.dir === "asc" ? "↑" : "↓") : "↕"}</span></button></th>`;
+};
+function sortedBacktests() {
+  const list = BACKTESTS.slice();
+  if (!btSort.key) return list;
+  const k = btSort.key, m = btSort.dir === "asc" ? 1 : -1;
+  return list.sort((a, b) => {
+    const av = a[k], bv = b[k];
+    if (av == null) return 1; if (bv == null) return -1;
+    return (typeof av === "string" ? av.localeCompare(bv) : av - bv) * m;
+  });
+}
+function pager(page, total, size) {
+  const from = page * size + 1, to = Math.min(total, (page + 1) * size);
+  return `<div class="pager"><span class="num">${from}–${to} of ${total}</span><div class="btns"><button class="btn btn-outline btn-sm" data-page="-1" ${page === 0 ? "disabled" : ""}>Previous</button><button class="btn btn-outline btn-sm" data-page="1" ${to >= total ? "disabled" : ""}>Next</button></div></div>`;
+}
+
+V.backtests = () => shell("backtests", crumb("Backtests"), `
+  <div class="page-head">
+    <div><h1>Backtests</h1><p>Every run records the exact strategy version it tested.</p></div>
+    <div class="actions"><button class="btn btn-primary" data-go="backtests/new">${ic("play")} New backtest</button></div>
+  </div>
+  <div class="card"><div class="table-wrap"><table>
+    <thead><tr>${sortTh("Strategy", "strat")}<th>Asset</th><th>Range</th><th>Status</th>${sortTh("Return", "ret", true)}${sortTh("Sharpe", "sharpe", true)}${sortTh("Trades", "trades", true)}<th class="r">When</th></tr></thead>
+    <tbody>${sortedBacktests().map(b => btRow(b, false)).join("")}</tbody>
+  </table></div></div>`);
+
+V["backtests/new"] = () => shell("backtests/new", crumb("Backtests", "New backtest"), `
+  <div><button class="back" data-go="backtests">${ic("back")} Backtests</button>
+  <div class="page-head"><div><h1>New backtest</h1><p>The run is queued, executes in a sandbox, and streams progress back to this page.</p></div></div></div>
+  <form class="cols-2" id="btForm">
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Strategy &amp; data</h3></div></div>
+        <div class="card-body form-grid">
+          <div class="field full"><label for="bs">Strategy</label><select class="select" id="bs">${STRATEGIES.filter(s => s.status !== "archived").map(s => `<option>${s.name} · ${s.asset} · v${s.version}</option>`).join("")}</select></div>
+          <div class="field"><label for="ba">Asset</label><input class="input" id="ba" value="AAPL"></div>
+          <div class="field"><label for="btf">Timeframe</label><select class="select" id="btf"><option>15m</option><option selected>1h</option><option>4h</option><option>1D</option></select></div>
+          <div class="field"><label for="bf">From</label><input class="input num" id="bf" type="date" value="2024-01-01"></div>
+          <div class="field"><label for="bto">To</label><input class="input num" id="bto" type="date" value="2025-12-31"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Execution</h3><div class="sub">Orders fill at the next candle's open.</div></div></div>
+        <div class="card-body form-grid">
+          <div class="field"><label for="bc">Initial capital</label><input class="input num" id="bc" value="$10,000"></div>
+          <div class="field"><label for="bps">Position sizing</label><select class="select" id="bps"><option>100% of equity</option><option>Fixed 25% of equity</option><option>Fixed quantity</option></select></div>
+          <div class="field"><label for="bsl">Slippage</label><input class="input num" id="bsl" value="5 bps"></div>
+          <div class="field"><label for="bcm">Commission</label><input class="input num" id="bcm" value="$1.00 per trade"></div>
+          <div class="field full"><label>Execution mode</label><div class="seg" role="group" aria-label="Execution mode"><button type="button" aria-pressed="true">Signal-based</button><button type="button" aria-pressed="false">Position-based</button></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-pad" style="display:flex;flex-direction:column;gap:0.8rem">
+      <h3 style="font-size:13px">Summary</h3>
+      ${[["Candles", "≈ 3,500 (1h, 2 years)"], ["Benchmark", "AAPL buy &amp; hold"], ["Sandbox limits", "128 MB · 30 s CPU"], ["Estimated time", "≈ 4 seconds"]].map(([k, v]) => `<div style="display:flex;justify-content:space-between;font-size:12px;gap:1rem"><span class="muted">${k}</span><span class="num">${v}</span></div>`).join("")}
+      <button class="btn btn-primary btn-block" type="submit">${ic("play")} Run backtest</button>
+      <p class="hint">You can leave this page; you'll get a notification when it finishes.</p>
+    </div>
+  </form>`);
+
+let runState = null;
+V["backtests/result"] = (q) => {
+  if (q.run === "1" && runState !== "done") return shell("backtests", crumb("Backtests", "Running"), `
+    <div class="card run-card">
+      <h2>Running backtest…</h2>
+      <p class="muted" style="font-size:12px">MA Crossover v${currentVersion} · AAPL · 1h · Jan 2024 – Dec 2025</p>
+      <div class="progress"><div id="runBar" style="width:0%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px" class="num"><span id="runPct">0%</span><span class="muted" id="runDate">Processing Jan 2, 2024</span></div>
+      <div><button class="btn btn-outline btn-sm" data-cancel>Cancel run</button></div>
+    </div>`);
+  const R = RESULT, n = R.equity.length;
+  const xl = [0, 6, 12, 18, 24].map(m => ({ i: Math.min(n - 1, m * 21), label: m === 24 ? "Dec 25" : MONTHS[m % 12] + " " + (m < 12 ? "24" : "25") }));
+  const yearRow = (y) => {
+    const arr = STRAT_MONTHLY[y]; const tot = (arr.reduce((p, m) => p * (1 + m / 100), 1) - 1) * 100;
+    return `<tr><td class="y">${y}</td>${arr.map(m => `<td style="background:color-mix(in srgb, ${m >= 0 ? "var(--success)" : "var(--danger)"} ${Math.min(70, 12 + Math.abs(m) * 9)}%, transparent);${Math.abs(m) > 4 ? "color:#fff;font-weight:600" : ""}">${m > 0 ? "+" : ""}${m.toFixed(1)}</td>`).join("")}<td class="yr ${cls(tot)}">${fmtPct(tot)}</td></tr>`;
+  };
+  const beat = R.totalReturn - R.benchReturn;
+  return shell("backtests/result", crumb("Backtests", "MA Crossover · AAPL"), `
+  <div><button class="back" data-go="backtests">${ic("back")} Backtests</button>
+  <div class="page-head">
+    <div><h1>MA Crossover <span class="muted" style="font-weight:400">v${currentVersion === 3 ? 3 : currentVersion}</span> <span class="status s-completed" style="vertical-align:middle">Completed</span></h1>
+      <p>AAPL · 1h · Jan 1, 2024 – Dec 31, 2025 · $10,000 start · 5 bps slippage · $1 commission · ran in 3.8 s</p></div>
+    <div class="actions"><button class="btn btn-outline" data-go="strategies/edit">${ic("edit")} Edit strategy</button><button class="btn btn-primary" data-go="portfolio" data-toast="MA Crossover assigned to Main portfolio">${ic("wallet")} Paper trade this</button></div>
+  </div></div>
+  <div class="kpis">
+    <div class="kpi"><span class="label">Total return</span><span class="value up">${fmtPct(R.totalReturn)}</span><span class="delta muted num">${fmtMoney(R.final)} final</span></div>
+    <div class="kpi"><span class="label">vs buy &amp; hold</span><span class="value ${cls(beat)}">${beat > 0 ? "+" : ""}${beat.toFixed(2)} pts</span><span class="delta muted">B&amp;H ${fmtPct(R.benchReturn)}</span></div>
+    <div class="kpi"><span class="label">Max drawdown</span><span class="value down">${R.maxDD.toFixed(2)}%</span></div>
+    <div class="kpi"><span class="label">Win rate</span><span class="value">${R.winRate.toFixed(1)}%</span><span class="delta muted">${R.trades.length} trades</span></div>
+    <div class="kpi"><span class="label">Sharpe</span><span class="value">${R.sharpe.toFixed(2)}</span></div>
+    <div class="kpi"><span class="label">Sortino</span><span class="value">${R.sortino.toFixed(2)}</span></div>
+  </div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Equity curve</h3><div class="sub">Portfolio value over the test period</div></div>
+          <div class="legend"><span><i style="background:var(--foreground)"></i>Strategy</span><span><i style="background:var(--muted-foreground)"></i>Buy &amp; hold</span></div></div>
+        <div class="card-body">${lineChart({ series: [{ values: R.equity, color: "var(--foreground)", label: "Strategy" }, { values: R.bench, color: "var(--muted-foreground)", dashed: true, label: "Buy and hold" }], h: 280, xFmt: X_BT, xLabels: xl })}</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Monthly returns</h3><div class="sub">% per month · ${R.losingMonths} losing months of 24</div></div></div>
+        <div class="card-body table-wrap"><table class="heat"><thead><tr><th class="y"></th>${MONTHS.map(m => `<th>${m}</th>`).join("")}<th>Year</th></tr></thead><tbody>${yearRow(2024)}${yearRow(2025)}</tbody></table></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Trade log</h3><div class="sub">${R.trades.length} trades · orders fill at the next candle's open</div></div><button class="btn btn-outline btn-sm" data-toast="trades.csv downloaded">${ic("download")} Export CSV</button></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>#</th><th>Entry</th><th>Exit</th><th class="r">Qty</th><th class="r">Entry px</th><th class="r">Exit px</th><th class="r">P&amp;L</th><th class="r">%</th></tr></thead>
+          <tbody>${R.trades.slice(tradePage * 12, tradePage * 12 + 12).map(t => `<tr><td class="muted">${t.n}</td><td>${fmtDate(t.entryDate)}</td><td>${fmtDate(t.exitDate)}</td><td class="r">${t.qty}</td><td class="r">${t.entry.toFixed(2)}</td><td class="r">${t.exit.toFixed(2)}</td><td class="r ${cls(t.pnl)}">${fmtSigned(t.pnl)}</td><td class="r ${cls(t.pct)}">${fmtPct(t.pct)}</td></tr>`).join("")}</tbody>
+        </table></div>
+        ${pager(tradePage, R.trades.length, 12)}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><h3>AI analysis</h3><div class="sub">Written from this run's trades and equity curve · 2 min ago</div></div></div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:1.1rem">
+        <div>
+          <div class="ai-section"><h4>Risk score</h4></div>
+          <div class="ai-score" style="margin-top:0.4rem"><span class="score">6<span class="muted" style="font-size:13px">/10</span></span><div class="meter">${Array.from({ length: 10 }, (_, i) => `<i class="${i < 6 ? "on" : ""}"></i>`).join("")}</div></div>
+          <p class="hint">Moderate. One asset, full position size and no stop-loss.</p>
+        </div>
+        <p class="ai-text">The strategy beat buy-and-hold by <b>${beat.toFixed(1)} percentage points</b> over two years, with most of the gain coming from strong trending months (Jun 2024, Apr 2025). It struggles when the market moves sideways: ${R.losingMonths} of 24 months lost money, mostly in range-bound stretches where the averages cross back and forth and trigger small repeated losses.</p>
+        <div class="ai-section"><h4>Performance by market condition</h4>
+          ${[["Trending up", 41.2], ["Sideways", -6.8], ["Trending down", 2.1]].map(([k, v]) => `<div class="cond"><span>${k}</span><div class="bar"><i style="left:${v < 0 ? 50 + v * 1.1 : 50}%;width:${Math.abs(v) * 1.1}%;background:${v < 0 ? "var(--danger)" : "var(--success)"}"></i></div><span class="r num ${cls(v)}" style="text-align:right">${fmtPct(v)}</span></div>`).join("")}
+        </div>
+        <div class="ai-section"><h4>Suggestions</h4><ul>
+          <li>Add an ATR stop (exit 2× ATR below entry) to cap the ${R.maxDD.toFixed(1)}% drawdown.</li>
+          <li>Only take entries when price is above its 200-period SMA, to skip sideways whipsaws.</li>
+          <li>Size positions by volatility instead of using 100% of equity on every trade.</li>
+        </ul></div>
+        <div class="ai-section"><h4>Overfitting check</h4><p style="font-size:12px;line-height:1.55">Low risk. Two parameters (10, 20) and ${R.trades.length} trades is a reasonable sample.</p></div>
+        <p class="hint">AI analysis can be wrong. It's not financial advice.</p>
+      </div>
+    </div>
+  </div>`);
+};
+const fmtDate = (d) => d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "2-digit", timeZone: "UTC" });
+
+V.portfolio = () => shell("portfolio", crumb("Portfolio", "Main portfolio"), `
+  <div class="page-head">
+    <div><h1>Main portfolio <span class="status s-live" style="vertical-align:middle">Live</span></h1><p>Paper trading with virtual money against live prices. Started Sep 10, 2026 with ${fmtMoney(PORT.start)}.</p></div>
+    <div class="actions"><button class="btn btn-outline" data-toast="Portfolio created">${ic("plus")} New portfolio</button><button class="btn btn-primary" data-go="strategies">${ic("code")} Assign strategy</button></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><span class="label">Portfolio value</span><span class="value">${fmtMoney(PORT.value)}</span><span class="delta up">${fmtPct((PORT.value / PORT.start - 1) * 100)} all time</span></div>
+    <div class="kpi"><span class="label">Cash</span><span class="value">${fmtMoney(PORT.cash)}</span><span class="delta muted">${(PORT.cash / PORT.value * 100).toFixed(1)}% of value</span></div>
+    <div class="kpi"><span class="label">Unrealized P&amp;L</span><span class="value up">${fmtSigned(PORT.unreal)}</span><span class="delta muted">${POSITIONS.length} open positions</span></div>
+    <div class="kpi"><span class="label">Realized P&amp;L</span><span class="value up">${fmtSigned(PORT.realized)}</span><span class="delta muted">17 closed trades</span></div>
+    <div class="kpi"><span class="label">Today</span><span class="value up">${fmtPct(PORT.today)}</span><span class="delta muted">SPY +0.42%</span></div>
+  </div>
+  <div class="cols-2">
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Value vs benchmark</h3><div class="sub">Last 30 days</div></div><div class="legend"><span><i style="background:var(--foreground)"></i>Portfolio</span><span><i style="background:var(--muted-foreground)"></i>SPY</span></div></div>
+        <div class="card-body">${lineChart({ series: [{ values: PORT.series, color: "var(--foreground)", label: "Portfolio" }, { values: PORT.bench, color: "var(--muted-foreground)", dashed: true, label: "SPY" }], h: 240, xFmt: X_PORT, xLabels: [{ i: 0, label: "Sep 10" }, { i: 15, label: "Sep 25" }, { i: 30, label: "Oct 10" }] })}</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Open positions</h3></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Symbol</th><th>Strategy</th><th class="r">Qty</th><th class="r">Entry</th><th class="r">Price</th><th class="r">Value</th><th class="r">P&amp;L</th></tr></thead>
+          <tbody>${POSITIONS.map(p => `<tr><td><b>${p.sym}</b></td><td class="muted">${p.strat}</td><td class="r">${p.qty}</td><td class="r">${fmtPrice(p.entry)}</td><td class="r">${fmtPrice(p.price)}</td><td class="r">${fmtMoney(p.value)}</td><td class="r ${cls(p.pnl)}">${fmtSigned(p.pnl)} <span style="font-size:11px">(${fmtPct(p.pct)})</span></td></tr>`).join("")}</tbody>
+        </table></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Transactions</h3><div class="sub">Every fill includes simulated slippage</div></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Time</th><th>Symbol</th><th>Side</th><th class="r">Qty</th><th class="r">Price</th><th>Strategy</th></tr></thead>
+          <tbody>${TXNS.map(t => `<tr><td class="muted">${t.when}</td><td><b>${t.sym}</b></td><td class="${t.side === "Buy" ? "up" : "down"}">${t.side}</td><td class="r">${t.qty}</td><td class="r">${fmtPrice(t.price)}</td><td class="muted">${t.strat}</td></tr>`).join("")}</tbody>
+        </table></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Strategies</h3><div class="sub">Pausing stops new orders; open positions stay.</div></div></div>
+        ${PORT_STRATS.map((s, i) => `<div class="set-row"><div><b>${s.name} <span class="muted" style="font-weight:400">v${s.v}</span></b><span>${s.asset} · ${s.tf} · <span class="${cls(s.pnl)}">${fmtSigned(s.pnl)}</span></span></div><label class="switch" aria-label="Run ${s.name}"><input type="checkbox" data-pstrat="${i}" ${s.on ? "checked" : ""}><span></span></label></div>`).join("")}
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Risk limits</h3></div></div>
+        <div class="card-body form-grid">
+          <div class="field"><label for="rmp">Max position size</label><input class="input num" id="rmp" value="25%"></div>
+          <div class="field"><label for="rdl">Daily loss limit</label><input class="input num" id="rdl" value="3%"></div>
+          <div class="field full"><label for="rda">Drawdown alert at</label><input class="input num" id="rda" value="10%"><p class="hint">Trading pauses automatically when the daily loss limit is hit.</p></div>
+          <div class="full form-actions"><button class="btn btn-primary btn-sm" data-toast="Risk limits saved">Save limits</button></div>
+        </div>
+      </div>
+    </div>
+  </div>`);
+
+V.community = () => shell("community", crumb("Community"), `
+  <div class="page-head">
+    <div><h1>Community strategies</h1><p>Strategies other traders made public. Cloning copies the code into your account as a private strategy.</p></div>
+  </div>
+  <div class="toolbar">
+    <div class="search">${ic("search")}<input placeholder="Search community strategies" aria-label="Search community"></div>
+    <div class="seg" role="group" aria-label="Sort"><button aria-pressed="true">Most cloned</button><button aria-pressed="false">Best return</button><button aria-pressed="false">Newest</button></div>
+  </div>
+  <div class="grid-cards">${COMMUNITY.map((c, i) => `
+    <div class="card s-card">
+      <div class="s-top"><span class="s-name">${c.name}</span>${c.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
+      <div class="chips"><span class="chip">${c.asset}</span><span class="chip">${c.tf}</span><span class="chip">@${c.author}</span></div>
+      <p class="s-desc">${c.desc}</p>
+      <div class="stat-line num"><span>Best return <b class="up">${fmtPct(c.ret)}</b></span><span>Sharpe <b>${c.sharpe.toFixed(2)}</b></span></div>
+      <div class="s-foot"><span class="num">${c.clones} clones</span><button class="btn btn-outline btn-sm" data-cclone="${i}">${ic("copy")} Clone</button></div>
+    </div>`).join("")}</div>`);
+
+let newKey = null, deleteArmed = false;
+V.settings = () => shell("settings", crumb("Settings"), `
+  <div class="page-head"><div><h1>Settings</h1><p>Your profile, notifications and API access.</p></div></div>
+  <div class="cols-even">
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Profile</h3></div></div>
+        <div class="card-body form-grid">
+          <div class="field full" style="display:flex;align-items:center;gap:0.8rem"><span class="avatar" style="width:44px;height:44px;font-size:14px">KJ</span><button class="btn btn-outline btn-sm" data-toast="Photo updated">Change photo</button></div>
+          <div class="field full"><label for="pn">Full name</label><input class="input" id="pn" value="Kavindu Jayakody"></div>
+          <div class="field full"><label for="pe">Email</label><input class="input" id="pe" value="kavindu@example.com"><p class="hint">Verified · Signed in with email and GitHub</p></div>
+          <div class="field"><label for="ptz">Timezone</label><select class="select" id="ptz"><option>Asia/Colombo (UTC+5:30)</option><option>UTC</option><option>America/New_York</option></select></div>
+          <div class="field"><label for="pc">Display currency</label><select class="select" id="pc"><option>USD</option><option>EUR</option><option>LKR</option></select></div>
+          <div class="full form-actions"><button class="btn btn-primary btn-sm" data-toast="Profile saved">Save profile</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Password</h3></div></div>
+        <div class="card-body form-grid">
+          <div class="field full"><label for="cp">Current password</label><input class="input" id="cp" type="password"></div>
+          <div class="field"><label for="np">New password</label><input class="input" id="np" type="password"></div>
+          <div class="field"><label for="np2">Confirm new password</label><input class="input" id="np2" type="password"></div>
+          <div class="full form-actions"><button class="btn btn-primary btn-sm" data-toast="Password changed">Change password</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Notifications</h3></div></div>
+        ${[["Backtest finished", "When a backtest completes or fails", true, true], ["Price alerts", "When a price crosses one of your alerts", true, true], ["Drawdown alerts", "When a portfolio passes its drawdown limit", true, false], ["Daily market summary", "AI summary of your watchlist each morning", false, false]]
+          .map(([t, d, app, mail]) => `<div class="set-row"><div><b>${t}</b><span>${d}</span></div><div style="display:flex;gap:1rem;align-items:center;font-size:11px" class="muted"><label style="display:flex;gap:0.4rem;align-items:center">In-app<span class="switch"><input type="checkbox" ${app ? "checked" : ""} aria-label="${t} in-app"><span></span></span></label><label style="display:flex;gap:0.4rem;align-items:center">Email<span class="switch"><input type="checkbox" ${mail ? "checked" : ""} aria-label="${t} email"><span></span></span></label></div></div>`).join("")}
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>API keys</h3><div class="sub">Read your strategies and backtest results from scripts.</div></div><button class="btn btn-outline btn-sm" data-newkey>${ic("key")} Create key</button></div>
+        ${newKey ? `<div class="card-body"><div class="keybox"><b>${newKey.name}</b><br><span class="num">${newKey.secret}</span></div><p class="hint">Copy it now. You won't be able to see it again.</p></div>` : ""}
+        ${API_KEYS.map(k => revokeArm === k.id
+          ? `<div class="set-row" style="flex-wrap:wrap;background:var(--danger-soft)"><div><b>Revoke "${k.name}"?</b><span>Scripts using this key stop working immediately. This can't be undone.</span></div><div style="display:flex;gap:0.4rem"><button class="btn btn-ghost btn-sm" data-revoke-cancel>Cancel</button><button class="btn btn-danger btn-sm" data-revoke-confirm="${k.id}">Revoke key</button></div></div>`
+          : `<div class="set-row"><div><b>${k.name}</b><span>Created ${k.created} · Last used ${k.used}</span></div><button class="btn btn-ghost btn-sm" data-revoke="${k.id}">Revoke</button></div>`).join("")}
+      </div>
+      <div class="card danger-zone">
+        <div class="card-head"><div><h3>Danger zone</h3></div></div>
+        <div class="set-row"><div><b>Export your data</b><span>Strategies, versions, backtests and trades as a ZIP of JSON files.</span></div><button class="btn btn-outline btn-sm" data-toast="Export started. We'll email you a download link.">${ic("download")} Export</button></div>
+        <div class="set-row" style="flex-wrap:wrap"><div><b>Delete account</b><span>Permanently deletes your account and all data. This can't be undone.</span></div>
+          ${deleteArmed
+            ? `<div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap"><input class="input" id="delConfirm" placeholder="Type DELETE" style="width:130px" aria-label="Type DELETE to confirm"><button class="btn btn-danger btn-sm" id="delBtn" disabled>Delete permanently</button><button class="btn btn-ghost btn-sm" data-cancel-del>Cancel</button></div>`
+            : `<button class="btn btn-outline btn-sm" data-arm-del style="color:var(--danger)">${ic("trash")} Delete account</button>`}
+        </div>
+      </div>
+    </div>
+  </div>`);
+
+/* ================= router ================= */
+function parse() {
+  const raw = location.hash.replace(/^#\/?/, "") || "home";
+  const [path, qs = ""] = raw.split("?");
+  const q = Object.fromEntries(new URLSearchParams(qs));
+  return { path: V[path] ? path : "home", q };
+}
+
+let runTimer = null;
+function render() {
+  const { path, q } = parse();
+  if (path !== "backtests/result") runState = null;
+  if (q.state && ["normal", "loading", "empty", "error"].includes(q.state)) mockState = q.state;
+  CHARTS = {}; chartSeq = 0;
+  document.getElementById("root").innerHTML = V[path](q);
+  document.getElementById("screenPicker").value = path;
+  document.getElementById("statePicker").value = mockState;
+  document.title = "TradeVision UI Reference";
+  bindCharts();
+  if (path === "backtests/result" && q.run === "1" && runState !== "done") startRun();
+}
+
+function startRun() {
+  clearInterval(runTimer);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let pct = reduce ? 100 : 0;
+  const start = Date.UTC(2024, 0, 2), end = Date.UTC(2025, 11, 31);
+  const tick = () => {
+    pct = Math.min(100, pct + 3);
+    const bar = document.getElementById("runBar");
+    if (!bar) { clearInterval(runTimer); return; }
+    bar.style.width = pct + "%";
+    document.getElementById("runPct").textContent = pct + "%";
+    document.getElementById("runDate").textContent = "Processing " + fmtDate(new Date(start + (end - start) * pct / 100));
+    if (pct >= 100) { clearInterval(runTimer); runState = "done"; setTimeout(() => { render(); toast("Backtest complete · AI analysis ready"); }, reduce ? 0 : 300); }
+  };
+  if (reduce) tick(); else runTimer = setInterval(tick, 70);
+}
+
+/* ================= theme ================= */
+function isDark() {
+  const t = document.documentElement.getAttribute("data-theme");
+  return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+/* ================= toast ================= */
+let toastTimer, toastUndo = null;
+function toast(msg, undo) {
+  const t = document.getElementById("toast");
+  toastUndo = undo || null;
+  t.innerHTML = ic("check") + `<span>${esc(msg)}</span>` + (undo ? `<button class="toast-act" id="toastUndo">Undo</button>` : "");
+  t.classList.add("visible");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, undo ? 6000 : 2400);
+}
+function hideToast() {
+  document.getElementById("toast").classList.remove("visible");
+  toastUndo = null;
+}
+function markDirty() {
+  const save = document.getElementById("saveBtn"); if (!save || !save.disabled) return;
+  save.disabled = false;
+  document.getElementById("dirtyNote").hidden = false;
+  document.getElementById("discardBtn").hidden = false;
+}
+function fieldError(input, id, msg) {
+  input.setAttribute("aria-invalid", "true");
+  input.setAttribute("aria-describedby", id);
+  if (!document.getElementById(id)) input.insertAdjacentHTML("afterend", `<p class="err" id="${id}">${msg}</p>`);
+  input.focus();
+}
+function clearFieldError(input) {
+  if (input.getAttribute("aria-invalid") !== "true") return;
+  input.removeAttribute("aria-invalid");
+  document.getElementById(input.getAttribute("aria-describedby"))?.remove();
+  input.removeAttribute("aria-describedby");
+}
+
+/* ================= events ================= */
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("button, a, [data-go], [data-notif], tr, .wl-row");
+  if (openMenu !== null && !(el && (el.closest(".menu") || el.dataset.menu))) { openMenu = null; if (!el) { render(); return; } }
+  if (!el) { if (notifOpen) { notifOpen = false; render(); } return; }
+  if (el.closest(".menu")) openMenu = null;
+
+  if (el.id === "toastUndo") { const fn = toastUndo; hideToast(); if (fn) { fn(); render(); toast("Undone"); } return; }
+  if (el.dataset.menu) { const id = +el.dataset.menu; openMenu = openMenu === id ? null : id; render(); if (openMenu !== null) document.querySelector(".menu [role=menuitem]")?.focus(); return; }
+  if (el.hasAttribute("data-retry")) { mockState = "normal"; render(); toast("Loaded"); return; }
+  if (el.dataset.sort) { const k = el.dataset.sort; btSort = btSort.key === k ? { key: k, dir: btSort.dir === "asc" ? "desc" : "asc" } : { key: k, dir: k === "strat" ? "asc" : "desc" }; render(); return; }
+  if (el.dataset.page) { tradePage += +el.dataset.page; render(); return; }
+  if (el.hasAttribute("data-save")) { const nv = Math.max(...VERSIONS.map(x => x.v)) + 1; VERSIONS.unshift({ v: nv, when: "Just now", note: "Edited name, settings or description" }); currentVersion = nv; render(); toast(`Saved as v${nv}`); return; }
+  if (el.hasAttribute("data-discard")) { render(); toast("Changes discarded"); return; }
+
+  if (el.id === "themeToggle") { document.documentElement.setAttribute("data-theme", isDark() ? "light" : "dark"); render(); return; }
+  if (el.id === "bell") { notifOpen = !notifOpen; render(); return; }
+  if (el.id === "markRead") { NOTIFS.forEach(n => n.read = true); render(); return; }
+  if (el.dataset.notif) { const n = NOTIFS.find(x => x.id === +el.dataset.notif); n.read = true; notifOpen = false; go(n.go); return; }
+  if (notifOpen && !el.closest(".notif-panel")) { notifOpen = false; }
+
+  if (el.dataset.toast) toast(el.dataset.toast);
+  if (el.dataset.go) { e.preventDefault(); go(el.dataset.go); return; }
+
+  if (el.dataset.sym) { marketSym = el.dataset.sym; render(); return; }
+  if (el.dataset.tf) { marketTf = el.dataset.tf; render(); return; }
+  if (el.dataset.delAlert) {
+    const i = ALERTS.findIndex(a => a.id === +el.dataset.delAlert); const [gone] = ALERTS.splice(i, 1);
+    render(); toast(`Alert for ${gone.sym} deleted`, () => { ALERTS.splice(i, 0, gone); }); return;
+  }
+
+  if (el.dataset.filter) { stratFilter = el.dataset.filter; render(); return; }
+  if (el.dataset.clone) {
+    const s = STRATEGIES.find(x => x.id === +el.dataset.clone);
+    STRATEGIES.unshift({ ...s, id: nextId++, name: s.name + " (Copy)", status: "active", version: 1, updated: "Just now" });
+    render(); toast(`Duplicated as "${s.name} (Copy)"`); return;
+  }
+  if (el.dataset.toggle) { const s = STRATEGIES.find(x => x.id === +el.dataset.toggle); s.status = s.status === "active" ? "paused" : "active"; render(); toast(`${s.name} ${s.status === "active" ? "activated" : "paused"}`); return; }
+  if (el.dataset.archive) { const s = STRATEGIES.find(x => x.id === +el.dataset.archive); const prev = s.status; s.status = "archived"; render(); toast(`"${s.name}" archived`, () => { s.status = prev; }); return; }
+  if (el.dataset.unarchive) { const s = STRATEGIES.find(x => x.id === +el.dataset.unarchive); s.status = "paused"; render(); toast(`"${s.name}" restored as paused`); return; }
+
+  if (el.dataset.tpl) { tplSel = el.dataset.tpl; render(); return; }
+  if (el.hasAttribute("data-create")) {
+    const nameEl = document.getElementById("sn"), name = nameEl.value.trim();
+    if (!name) { fieldError(nameEl, "sn-err", "Give the strategy a name so you can find it later."); return; }
+    STRATEGIES.unshift({ id: nextId++, name, asset: document.getElementById("sa").value || "AAPL", tf: document.getElementById("st").value, status: "active", version: 1, updated: "Just now", desc: document.getElementById("sd").value || "No description yet." });
+    toast(`"${name}" created`); go(el.dataset.create === "backtest" ? "backtests/new" : "strategies"); return;
+  }
+
+  if (el.dataset.restore) {
+    const v = +el.dataset.restore; const nv = Math.max(...VERSIONS.map(x => x.v)) + 1;
+    VERSIONS.unshift({ v: nv, when: "Just now", note: `Restored from v${v}` }); currentVersion = nv;
+    toast(`Restored v${v} as v${nv}`); render(); return;
+  }
+
+  if (el.hasAttribute("data-cancel")) { clearInterval(runTimer); toast("Backtest cancelled"); go("backtests"); return; }
+
+  if (el.dataset.cclone) { const c = COMMUNITY[+el.dataset.cclone]; STRATEGIES.unshift({ id: nextId++, name: c.name, asset: c.asset, tf: c.tf, status: "paused", version: 1, updated: "Just now", desc: c.desc }); toast(`"${c.name}" cloned to your strategies`); return; }
+
+  if (el.hasAttribute("data-newkey")) { const id = nextKeyId++; newKey = { name: "New key " + id, secret: "tv_live_" + Array.from({ length: 32 }, (_, i) => "abcdef0123456789"[(i * 7 + id * 3) % 16]).join("") }; API_KEYS.unshift({ id, name: newKey.name, created: "Oct 10, 2026", used: "never" }); render(); return; }
+  if (el.dataset.revoke) { revokeArm = +el.dataset.revoke; render(); document.querySelector("[data-revoke-cancel]")?.focus(); return; }
+  if (el.hasAttribute("data-revoke-cancel")) { revokeArm = null; render(); return; }
+  if (el.dataset.revokeConfirm) { const k = API_KEYS.find(x => x.id === +el.dataset.revokeConfirm); API_KEYS = API_KEYS.filter(x => x !== k); revokeArm = null; newKey = null; render(); toast(`"${k.name}" revoked`); return; }
+  if (el.hasAttribute("data-arm-del")) { deleteArmed = true; render(); document.getElementById("delConfirm").focus(); return; }
+  if (el.hasAttribute("data-cancel-del")) { deleteArmed = false; render(); return; }
+  if (el.id === "delBtn") { deleteArmed = false; toast("Account deletion scheduled. You have 7 days to undo it."); render(); return; }
+
+  if ((notifOpen === false && document.querySelector(".notif-panel")) || (openMenu === null && document.querySelector(".menu"))) render();
+});
+
+document.addEventListener("change", (e) => {
+  if (e.target.id === "screenPicker") { notifOpen = false; go(e.target.value); }
+  if (e.target.id === "statePicker") { mockState = e.target.value; render(); }
+  if (e.target.dataset.pstrat !== undefined) { const s = PORT_STRATS[+e.target.dataset.pstrat]; s.on = e.target.checked; toast(`${s.name} ${s.on ? "resumed" : "paused"}`); }
+});
+
+document.addEventListener("input", (e) => {
+  if (e.target.id === "stratSearch") {
+    stratQuery = e.target.value; const pos = e.target.selectionStart; render();
+    const inp = document.getElementById("stratSearch"); inp.focus(); inp.setSelectionRange(pos, pos);
+  }
+  if (e.target.id === "delConfirm") document.getElementById("delBtn").disabled = e.target.value !== "DELETE";
+  if (e.target.closest && e.target.closest("#editForm")) markDirty();
+  if (["sn", "bf", "bto"].includes(e.target.id)) { clearFieldError(e.target); if (e.target.id === "bf") clearFieldError(document.getElementById("bto")); }
+});
+
+document.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.id === "authForm") { if (f.dataset.toast) toast(f.dataset.toast); go(f.dataset.next); }
+  if (f.id === "alertForm") {
+    const price = parseFloat(document.getElementById("ap").value);
+    if (!price) { toast("Enter a price to create the alert"); return; }
+    ALERTS.unshift({ id: nextAlertId++, sym: document.getElementById("as").value, cond: document.getElementById("ac").value, price });
+    toast("Alert created"); render();
+  }
+  if (f.id === "btForm") {
+    const from = document.getElementById("bf"), to = document.getElementById("bto");
+    if (!from.value || !to.value || to.value <= from.value) { fieldError(to, "bto-err", "The end date has to be after the start date."); return; }
+    runState = null; go("backtests/result?run=1");
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "/" && !e.target.matches("input, textarea, select")) { const s = document.querySelector(".gsearch input"); if (s) { e.preventDefault(); s.focus(); } }
+  if (e.key === "Escape" && openMenu !== null) { const id = openMenu; openMenu = null; render(); document.querySelector(`[data-menu="${id}"]`)?.focus(); return; }
+  if (e.key === "Escape" && notifOpen) { notifOpen = false; render(); }
+  if (e.key === "Enter" && e.target.matches("[data-go][tabindex], .wl-row")) e.target.click();
+});
+
+const picker = document.getElementById("screenPicker");
+picker.innerHTML = SCREENS.map(([r, l]) => `<option value="${r}">${l}</option>`).join("");
+window.addEventListener("hashchange", () => { notifOpen = false; render(); });
+if (!location.hash) location.hash = "#/dashboard"; else render();
+</script>
+
+</body>
+</html>

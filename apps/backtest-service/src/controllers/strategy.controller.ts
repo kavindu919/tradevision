@@ -162,6 +162,7 @@ export const updateStrategy = async (req: Request, res: Response) => {
         asset_symbol: assetSymbol,
         timeframe: timeframe,
         is_public: isPublic,
+        version: strategy.version + 1,
       },
     });
     await prisma.strategyVersion.create({
@@ -259,7 +260,6 @@ export const cloneStrategy = async (req: Request, res: Response) => {
       message: "Strategy cloned successfully",
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       success: false,
       message: "Something went wrong, please try again",
@@ -267,28 +267,90 @@ export const cloneStrategy = async (req: Request, res: Response) => {
   }
 };
 
-export const listPublicStrategies = async (req: Request, res: Response) => {
+export const listStrategyVersions = async (req: Request, res: Response) => {
   try {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 20;
+    const strategy = await prisma.strategy.findFirst({
+      where: {
+        user_id: req.user?.id,
+        id: req.params.id,
+      },
+    });
+    if (!strategy) {
+      return res.status(404).json({
+        success: false,
+        message: "Strategy not found.",
+      });
+    }
 
-    const [strategies, total] = await Promise.all([
-      prisma.strategy.findMany({
-        where: {
-          is_public: true,
-          status: "active",
-        },
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * limit,
-        take: limit,
-        include: { user: { select: { full_name: true, avatar_url: true } } },
-      }),
-      prisma.strategy.count({ where: { isPublic: true, status: "active" } }),
-    ]);
+    const data = await prisma.strategyVersion.findMany({
+      where: {
+        strategyId: req.params.id,
+      },
+      select: {
+        id: true,
+        strategyId: true,
+        version: true,
+        code: true,
+        description: true,
+        createdAt: true,
+      },
+      orderBy: { version: "desc" },
+    });
     return res.status(200).json({
       success: true,
-      data: { strategies, total, page, limit },
+      data,
       message: "Successfully retrieved strategies",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong, please try again",
+    });
+  }
+};
+
+export const restoreStrategyVersion = async (req: Request, res: Response) => {
+  try {
+    const strategy = await prisma.strategy.findFirst({
+      where: {
+        user_id: req.user?.id,
+        id: req.params.id,
+      },
+    });
+    if (!strategy) {
+      return res.status(404).json({
+        success: false,
+        message: "Strategy not found.",
+      });
+    }
+    const targetVersion = await prisma.strategyVersion.findFirst({
+      where: { strategyId: req.params.id, version: Number(req.params.version) },
+    });
+    if (!targetVersion)
+      return res
+        .status(404)
+        .json({ success: false, message: "Version not found." });
+
+    await prisma.strategyVersion.create({
+      data: {
+        strategyId: strategy.id,
+        version: strategy.version,
+        code: strategy.code,
+        description: strategy.description,
+      },
+    });
+
+    await prisma.strategy.update({
+      where: { user_id: req.user?.id, id: req.params.id },
+      data: {
+        code: targetVersion.code,
+        description: targetVersion.description,
+        version: strategy.version + 1,
+      },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Strategy restored successfully",
     });
   } catch (error) {
     return res.status(500).json({

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { socket } from "../lib/socket";
+import { socket } from "@/lib/socket";
 import { Socket } from "socket.io-client";
 
 interface UseSocketReturn {

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { PriceUpdate, UseMarketPriceReturn } from "../types/market.typs";
-import { socket } from "../lib/socket";
+import { PriceUpdate, UseMarketPriceReturn } from "@/app/types/market.types";
+import { socket } from "@/lib/socket";
 
 export const useMarketPrice = (symbols: string[]): UseMarketPriceReturn => {
   const [prices, setPrices] = useState<Record<string, PriceUpdate>>({});
